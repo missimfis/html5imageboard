@@ -1,0 +1,21 @@
+%h1 Listing image_threads
+
+%table
+  %tr
+    %th Title
+    %th Created at
+    %th
+    %th
+    %th
+
+  - @image_threads.each do |image_thread|
+    %tr
+      %td= image_thread.title
+      %td= image_thread.created_at
+      %td= link_to 'Show', image_thread
+      %td= link_to 'Edit', edit_image_thread_path(image_thread)
+      %td= link_to 'Destroy', image_thread, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Image thread', new_image_thread_path
