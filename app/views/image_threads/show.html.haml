@@ -1,12 +1,5 @@
 %p#notice= notice
 
-%p
-  %b Title:
-  = @image_thread.title
-%p
-  %b Created at:
-  = @image_thread.created_at
-
-= link_to 'Edit', edit_image_thread_path(@image_thread)
-\|
-= link_to 'Back', image_threads_path
+%h1= @image_thread.title
+%p="created "+distance_of_time_in_words(Time.now,@image_thread.created_at,true)
+%a{:href=>"#",:id=>"link-add-post"} add post

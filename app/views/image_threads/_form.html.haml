@@ -7,10 +7,5 @@
           %li= msg
 
   .field
-    = f.label :title
     = f.text_field :title
-  .field
-    = f.label :created_at
-    = f.date_select :created_at
-  .actions
-    = f.submit 'Save'
+    = f.submit 'Create thread'

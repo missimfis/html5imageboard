@@ -2,6 +2,7 @@ class ImageThreadsController < ApplicationController
   # GET /image_threads
   # GET /image_threads.xml
   def index
+    @image_thread = ImageThread.new
     @image_threads = ImageThread.all
 
     respond_to do |format|
@@ -21,17 +22,6 @@ class ImageThreadsController < ApplicationController
     end
   end
 
-  # GET /image_threads/new
-  # GET /image_threads/new.xml
-  def new
-    @image_thread = ImageThread.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @image_thread }
-    end
-  end
-
   # GET /image_threads/1/edit
   def edit
     @image_thread = ImageThread.find(params[:id])
@@ -44,7 +34,7 @@ class ImageThreadsController < ApplicationController
 
     respond_to do |format|
       if @image_thread.save
-        format.html { redirect_to(@image_thread, :notice => 'Image thread was successfully created.') }
+        format.html { redirect_to(@image_thread, :notice => 'Image thread was successfully created. Start adding a post...') }
         format.xml  { render :xml => @image_thread, :status => :created, :location => @image_thread }
       else
         format.html { render :action => "new" }
