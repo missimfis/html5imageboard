@@ -2,7 +2,25 @@ html, body, h1, form, fieldset, legend, ol, li
   margin: 0
   padding: 0
 
-form#new_image_thread
+img
+  border: none
+
+.ib-button
+  outline: 0
+  padding: .4em 1em .4em 20px
+  text-decoration: none
+  position: relative
+  cursor: pointer
+  text-align: center
+
+.ib-button span.ui-icon
+  margin: 0 5px 0 0
+  position: absolute
+  left: .2em
+  top: 50%
+  margin-top: -8px
+
+form#new_board
   input:not([type=radio]):not([type=submit]), textarea
     background: #ffffff
     border: 1px solid gray

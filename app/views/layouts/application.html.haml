@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title Html5imageboard
+    = stylesheet_link_tag :all
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+  %body
+    %header= link_to image_tag("logo.png"),boards_path
+    - if notice
+      #notice.ui-state-highlight.ui-corner-all
+        %span.ui-icon.ui-icon-info= notice
+    #container= yield

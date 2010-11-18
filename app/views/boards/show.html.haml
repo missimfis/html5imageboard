@@ -1,0 +1,5 @@
+%h1= @board.title
+%p="created "+distance_of_time_in_words(Time.now,@board.created_at,true)
+%a#button_add_post.ib-button.ui-state-default.ui-corner-all{:href=>"#"}
+    %span.ui-icon.ui-icon-plusthick
+    Add new post

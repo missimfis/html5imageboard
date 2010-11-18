@@ -12,18 +12,18 @@
 
 ActiveRecord::Schema.define(:version => 20101112111650) do
 
-  create_table "image_threads", :force => true do |t|
+  create_table "boards", :force => true do |t|
     t.string   "title"
-    t.date     "created_at"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "images", :force => true do |t|
+  create_table "posts", :force => true do |t|
     t.string   "data"
-    t.date     "created_at"
     t.string   "title"
     t.string   "description"
-    t.integer  "image_thread_id"
+    t.integer  "boards_id"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 

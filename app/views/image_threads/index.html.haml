@@ -1,7 +1,0 @@
-#new_thread
-  %h2 new thread
-  %p= render 'form'
-%h1 threads
-- @image_threads.each do |image_thread|
-  %h2= link_to image_thread.title, image_thread
-  %p= distance_of_time_in_words Time.now,image_thread.created_at,true

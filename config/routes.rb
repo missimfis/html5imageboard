@@ -1,5 +1,5 @@
 Html5imageboard::Application.routes.draw do
-  resources :image_threads
+  resources :boards
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

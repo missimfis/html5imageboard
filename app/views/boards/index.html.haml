@@ -1,0 +1,11 @@
+#new_board
+  %a#new_board_button.ib-button.ui-state-default.ui-corner-all{:href=>"#"}
+    %span.ui-icon.ui-icon-document
+    Create new board
+  #new_board_form{:style=>"display:none;"}
+    %h2 new board
+    %p= render 'form'
+%h1 threads
+- @boards.each do |board|
+  %h2= link_to board.title, board
+  %p= distance_of_time_in_words Time.now,board.created_at,true
