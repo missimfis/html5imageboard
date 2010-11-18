@@ -1,2 +1,4 @@
 = html5imageboard
 an image board based on html5 with canvas.
+==Licence
+GPL3

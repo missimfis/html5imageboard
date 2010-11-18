@@ -34,10 +34,11 @@ class BoardsController < ApplicationController
 
     respond_to do |format|
       if @board.save
-        format.html { redirect_to(@board, :notice => 'Image board was successfully created. Start adding a post...') }
+        format.html { redirect_to(@board, :notice => 'Board was successfully created. Start adding a post...') }
         format.xml  { render :xml => @board, :status => :created, :location => @board }
       else
-        format.html { render :action => "new" }
+        @boards = Board.all
+        format.html { render :action => "index" }
         format.xml  { render :xml => @board.errors, :status => :unprocessable_entity }
       end
     end

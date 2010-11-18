@@ -5,5 +5,15 @@ $(".ib-button").hover(
     function() {$(this).addClass('ui-state-hover'); },
     function() {$(this).removeClass('ui-state-hover');}
       );
-$("#new_board_button").click(function() {$("#new_board_form").show('blind');});
+$("#new_board_button").toggle(function() {
+  $("#new_board_form").fadeIn('fast');
+},function() {$("#new_board_form").fadeOut('fast');});
+
+$("#board_submit").button({
+  icons: {
+    primary:"ui-icon-check"
+         }
+});
+
+
 });

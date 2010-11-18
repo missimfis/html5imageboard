@@ -19,7 +19,8 @@ img
   left: .2em
   top: 50%
   margin-top: -8px
-
+#container
+  margin-left: 20px
 form#new_board
   input:not([type=radio]):not([type=submit]), textarea
     background: #ffffff
@@ -28,7 +29,17 @@ form#new_board
     -webkit-border-radius: 3px
     -khtml-border-radius: 3px
     border-radius: 3px
-    font: italic 13px Georgia, "Times New Roman", Times, serif
+    font: italic 22px Georgia, "Times New Roman", Times, serif
     outline: none
     padding: 5px
     width: 500px
+    &:focus
+      background-color: #E6E6E6
+#error_explanation
+  margin: 1em
+.field_with_errors
+  display: inline
+  input
+    border: 2px solid red !important
+    background-color: red
+    margin: 1px
