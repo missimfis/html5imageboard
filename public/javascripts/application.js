@@ -15,5 +15,9 @@ $("#board_submit").button({
          }
 });
 
+$("#new_post_button").toggle(function() {
+  $("#new_post_form").fadeIn('fast');
+},function() {$("#new_post_form").fadeOut('fast');});
+
 
 });
