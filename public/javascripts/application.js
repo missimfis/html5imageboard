@@ -19,5 +19,11 @@ $("#new_post_button").toggle(function() {
   $("#new_post_form").fadeIn('fast');
 },function() {$("#new_post_form").fadeOut('fast');});
 
+// Add posts form
+$("#post_submit").button({
+  icons: {primary: "ui-icon-plusthick"}
+});
+
+
 
 });

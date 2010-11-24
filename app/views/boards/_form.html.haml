@@ -1,4 +1,4 @@
-= form_for @board do |f|
+= form_for @board, :html =>{:class => "ib-form"} do |f|
   -if @board.errors.any?
     #error_explanation.ui-state-error.ui-corner-all{:style=>"padding: 0.7em;"}
       %span.ui-icon.ui-icon-alert{:style=>"float: left; margin-right: .3em;"}

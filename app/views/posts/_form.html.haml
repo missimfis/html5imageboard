@@ -1,11 +1,10 @@
-= form_for @board.post do |f|
-  -if @post.errors.any?
-    #error_explanation.ui-state-error.ui-corner-all{:style=>"padding: 0.7em;"}
-      %span.ui-icon.ui-icon-alert{:style=>"float: left; margin-right: .3em;"}
-      %h2= "#{pluralize(@post.errors.count, "error")} prohibited this board from being saved:"
-      %ul
-        - @post.errors.full_messages.each do |msg|
-          %li= msg
+= form_for([@board, @board.posts.build], :html =>{:class => "ib-form"}) do |f|
   .field
+    = f.label "Title"
     = f.text_field :title
+    = f.label "Data (getting replaced by canvas)"
+    = f.text_field :data
+    = f.label "Description"
+    = f.text_area :description, :rows => "4", :cols => "6"
+    %br
     = f.submit 'Create post'
