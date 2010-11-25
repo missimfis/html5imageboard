@@ -7,3 +7,4 @@
 - @boards.each do |board|
   %h2= link_to board.title, board
   %p= "created "+distance_of_time_in_words(Time.now,board.created_at,true) + " ago"
+%p= will_paginate @boards

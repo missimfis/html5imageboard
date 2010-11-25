@@ -3,7 +3,7 @@ class BoardsController < ApplicationController
   # GET /boards.xml
   def index
     @board = Board.new
-    @boards = Board.all
+    @boards = Board.paginate :page => params[:page], :order => 'created_at DESC'
 
     respond_to do |format|
       format.html # index.html.erb
