@@ -1,5 +1,7 @@
 Html5imageboard::Application.routes.draw do
-  resources :boards, :only => [:index, :show, :create]
+  resources :boards, :only => [:index, :show, :create] do
+    resources :posts
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

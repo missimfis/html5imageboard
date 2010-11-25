@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20101112111650) do
     t.string   "data"
     t.string   "title"
     t.string   "description"
-    t.integer  "boards_id"
+    t.integer  "board_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
