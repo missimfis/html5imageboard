@@ -15,6 +15,7 @@ class BoardsController < ApplicationController
   # GET /boards/1.xml
   def show
     @board = Board.find(params[:id])
+    @posts = @board.posts.paginate :page => params[:page], :order => 'created_at DESC',:per_page => 4
 
     respond_to do |format|
       format.html # show.html.erb

@@ -1,7 +1,8 @@
 %h1= @board.title
 %p="created "+distance_of_time_in_words(Time.now,@board.created_at,true)
 #posts
-  = render :partial => "posts/post", :collection => @board.posts
+  = render :partial => "posts/post", :collection => @posts
+  = will_paginate @posts
 = button "Add new post", :icon => "ui-icon-plusthick", :id => "new_post_button"
 #new_post_form{:style=> "display:none;"}
   %h2 new post
