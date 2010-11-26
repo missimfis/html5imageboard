@@ -23,7 +23,12 @@ $("#new_post_button").toggle(function() {
 $("#post_submit").button({
   icons: {primary: "ui-icon-plusthick"}
 });
+$('#drawbox').drawbox({
+      caption:'This is a caption'
+      , lineWidth:5
+      , lineCap:'round'
+      , lineJoin:'round'
+      , colorSelector:true
+      , showClear: false});
 
-
-
-});
+});    

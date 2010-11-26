@@ -2,8 +2,9 @@
   .field
     = f.label "Title"
     = f.text_field :title
-    = f.label "Data (getting replaced by canvas)"
-    = f.text_field :data
+    %br
+    %canvas{:id=>"drawbox",:width=>"500",:height=>"300"}
+    %br
     = f.label "Description"
     = f.text_area :description, :rows => "4", :cols => "6"
     %br
