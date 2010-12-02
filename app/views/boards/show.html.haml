@@ -4,6 +4,6 @@
   = render :partial => "posts/post", :collection => @posts
   = will_paginate @posts
 = button "Add new post", :icon => "ui-icon-plusthick", :id => "new_post_button"
-#new_post_form{:style=> "display:none;"}
+#new_post_form{:style=>"display:none;"}
   %h2 new post
   %p= render 'posts/form'

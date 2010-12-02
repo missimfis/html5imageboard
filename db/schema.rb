@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20101112111650) do
   end
 
   create_table "posts", :force => true do |t|
-    t.string   "data"
+    t.string   "svg"
     t.string   "title"
     t.string   "description"
     t.integer  "board_id"

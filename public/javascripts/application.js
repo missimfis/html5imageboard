@@ -16,13 +16,16 @@ $("#board_submit").button({
 });
 
 $("#new_post_button").toggle(function() {
-  $("#new_post_form").fadeIn('fast');
+  $("#new_post_form").fadeIn('fast');initDrawBox();
 },function() {$("#new_post_form").fadeOut('fast');});
 
 // Add posts form
 $("#post_submit").button({
   icons: {primary: "ui-icon-plusthick"}
 });
+
+function initDrawBox() {
+  $('[id|="drawbox"]').not("canvas").remove();
 $('#drawbox').drawbox({
       caption:'This is a caption'
       , lineWidth:5
@@ -30,5 +33,5 @@ $('#drawbox').drawbox({
       , lineJoin:'round'
       , colorSelector:true
       , showClear: false});
-
+}
 });    
