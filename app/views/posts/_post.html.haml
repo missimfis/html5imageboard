@@ -1,4 +1,4 @@
 .post
   %h3= post.title
-  %p= post.svg
+  %p= image_tag "/posts/image/"+post.id.to_s
   %p= post.description

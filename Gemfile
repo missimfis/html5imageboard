@@ -10,6 +10,8 @@ gem 'jquery-rails'
 gem 'haml-rails'
 gem 'will_paginate', '~> 3.0.beta'
 
+gem 'rmagick'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

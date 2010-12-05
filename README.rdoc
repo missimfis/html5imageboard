@@ -2,3 +2,5 @@
 an image board based on html5 with canvas.
 ==Licence
 GPL3
+==Install
+pacman -S imagemagick librsvg
