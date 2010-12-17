@@ -3,7 +3,11 @@ class PostsController < ApplicationController
     params[:post][:svg] = params["drawbox-data"]
     @board = Board.find(params[:board_id])
     @post = @board.posts.create(params[:post])
-    redirect_to board_path(@board)
+    if @post.invalid?
+      redirect_to board_path(@board), :notice => "can't add post!"
+    else
+      redirect_to board_path(@board)
+    end
   end
   def image
     cache_key = "img-"+params[:id]
