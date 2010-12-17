@@ -4,6 +4,7 @@
     = f.text_field :title
     %br
     %canvas{:id=>"drawbox",:width=>"500",:height=>"300"}
+    = #%button{:id=>"drawbox-clear"} Clear
     %br
     = f.label "Description"
     = f.text_area :description, :rows => "4", :cols => "6"

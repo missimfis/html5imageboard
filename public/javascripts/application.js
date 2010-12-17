@@ -14,7 +14,6 @@ $("#board_submit").button({
     primary:"ui-icon-check"
          }
 });
-
 $("#new_post_button").toggle(function() {
   $("#new_post_form").fadeIn('fast');initDrawBox();
 },function() {$("#new_post_form").fadeOut('fast');});
@@ -32,6 +31,8 @@ $('#drawbox').drawbox({
       , lineCap:'round'
       , lineJoin:'round'
       , colorSelector:true
-      , showClear: false});
+      , showClear: true});
+  $("#drawbox-clear").button({icons: {primary: "ui-icon-cancel"}});
+$("#drawbox-clear").click(function() {return false;});
 }
 });    
