@@ -1,10 +1,10 @@
-html, body, h1, form, fieldset, legend, ol, li
-  margin: 0
-  padding: 0
-
+body
+  color: black
+  text-align: center
+a
+  text-decoration: none
 img
   border: none
-
 .ib-button
   outline: 0
   padding: .4em 1em .4em 20px
@@ -12,7 +12,6 @@ img
   position: relative
   cursor: pointer
   text-align: center
-
 .ib-button span.ui-icon
   margin: 0 5px 0 0
   position: absolute
@@ -29,28 +28,17 @@ img
 form.ib-form
   label
     display: block
-    font-size: 1.4em
-  input:not([type=radio]):not([type=submit]), textarea
-    background: #ffffff
-    border: 1px solid gray
-    -moz-border-radius: 3px
-    -webkit-border-radius: 3px
-    -khtml-border-radius: 3px
-    border-radius: 3px
-    font: italic 22px Georgia, "Times New Roman", Times, serif
-    outline: none
-    padding: 5px
-    width: 500px
-    &:focus
-      color: #000000
-      background-color: #E6E6E6
-#error_explanation
-  margin: 1em
-.field_with_errors
-  display: inline
-  input
-    border: 2px solid red !important
-    background-color: red
-    margin: 1px
-#drawbox-clear
-  margin-left: 150px
+    margin-top: 1em
+    input:not([type=radio]):not([type=submit])
+      background: #ffffff
+      border: 1px solid gray
+      -moz-border-radius: 3px
+      -webkit-border-radius: 3px
+      -khtml-border-radius: 3px
+      border-radius: 3px
+      outline: none
+      padding: 5px
+      width: 500px
+      &:focus
+        color: #000000
+        background-color: #E6E6E6
