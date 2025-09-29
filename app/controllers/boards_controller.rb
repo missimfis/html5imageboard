@@ -2,12 +2,12 @@ class BoardsController < ApplicationController
   # GET /boards
   # GET /boards.xml
   def index
-    @board = Board.new
-    @boards = Board.paginate :page => params[:page], :order => 'created_at DESC'
-
+    @board  = Board.new
+    @boards = Board.order(created_at: :desc)
+                 .paginate(page: params[:page])
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @boards }
+      #format.xml  { render :xml => @boards }
     end
   end
 

@@ -3,7 +3,7 @@ Html5imageboard::Application.routes.draw do
     resources :posts
   end
 
-  match "posts/image/:id" => "posts#image" 
+  get "posts/image/:id", to: "posts#image" 
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
