@@ -1,17 +1,22 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.1'
+gem 'rails', '7.1.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'sqlite3', '~> 1.6'
+
 gem 'jquery-rails'
 gem 'haml-rails'
-gem 'will_paginate', '~> 3.0.beta'
+gem 'will_paginate', '~> 4.0'
 
-gem 'rmagick'
+gem 'rmagick', '~> 5.3'
 
+gem "bootsnap", ">= 1.14.0", require: false
+
+gem "turbo-rails"
+gem "stimulus-rails"
 # Use unicorn as the web server
 # gem 'unicorn'
 
@@ -33,3 +38,11 @@ gem 'rmagick'
 # group :development, :test do
 #   gem 'webrat'
 # end
+group :development, :test do
+  # gem 'webrat'                # webrat is deprecated; consider capybara instead
+  gem 'rspec-rails', '~> 6.0'
+  gem 'factory_bot_rails', '~> 6.5'
+  gem "puma", "~> 6.4"
+  gem "logger", "~> 1.5"
+  gem "benchmark", "~> 0.2"
+end

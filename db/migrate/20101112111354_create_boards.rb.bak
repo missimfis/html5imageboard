@@ -1,4 +1,4 @@
-class CreateBoards < ActiveRecord::Migration[5.2]
+class CreateBoards < ActiveRecord::Migration
   def self.up
     create_table :boards do |t|
       t.string :title
