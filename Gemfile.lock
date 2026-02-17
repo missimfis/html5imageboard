@@ -150,8 +150,10 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.16.0)
+    nokogiri (1.18.9)
       mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    nokogiri (1.18.9-x86_64-linux-gnu)
       racc (~> 1.4)
     observer (0.1.2)
     pkg-config (1.6.5)
@@ -265,7 +267,7 @@ DEPENDENCIES
   haml-rails
   jquery-rails
   logger
-  nokogiri (= 1.16.0)
+  nokogiri (= 1.18.9)
   puma
   rails (~> 7.1.0)
   rmagick (~> 6.0)
@@ -324,7 +326,8 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
-  nokogiri (1.16.0) sha256=341388184e975d091e6e38ce3f3b3388bfb7e4ac3d790efd8e39124844040bd1
+  nokogiri (1.18.9) sha256=ac5a7d93fd0e3cef388800b037407890882413feccca79eb0272a2715a82fa33
+  nokogiri (1.18.9-x86_64-linux-gnu) sha256=b52f5defedc53d14f71eeaaf990da66b077e1918a2e13088b6a96d0230f44360
   observer (0.1.2) sha256=d8a3107131ba661138d748e7be3dbafc0d82e732fffba9fccb3d7829880950ac
   pkg-config (1.6.5) sha256=33f9f81c5322983d22b439b8b672f27777b406fea23bfec74ff14bbeb42ec733
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6

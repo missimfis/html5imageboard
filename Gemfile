@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 7.1.0'
 
-gem 'nokogiri', '1.16.0'
+gem 'nokogiri', '1.18.9'
 gem 'sqlite3', '~> 1.7'
 
 gem 'jquery-rails'
