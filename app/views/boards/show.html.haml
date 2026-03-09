@@ -1,5 +1,5 @@
 %h1= @board.title
-%p="created "+distance_of_time_in_words(Time.now,@board.created_at,true)
+%p="created #{distance_of_time_in_words(@board.created_at, Time.now)} ago"
 #posts
   = render :partial => "posts/post", :collection => @posts
   = will_paginate @posts

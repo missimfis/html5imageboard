@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_29_184342) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_29_184343) do
   create_table "boards", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", precision: nil, null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_29_184342) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["board_id"], name: "index_posts_on_board_id"
+    t.index ["created_at"], name: "index_posts_on_created_at"
   end
 
 end

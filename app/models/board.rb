@@ -1,7 +1,5 @@
-class Board < ActiveRecord::Base
-  self.per_page = 6
-  validates_uniqueness_of :title
-  validates_presence_of :title
+class Board < ApplicationRecord
+  validates :title, uniqueness: true, presence: true
 
-  has_many :posts
+  has_many :posts, dependent: :destroy
 end

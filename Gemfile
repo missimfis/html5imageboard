@@ -5,11 +5,11 @@ gem 'rails', '~> 7.1.0'
 gem 'nokogiri', '1.19.1'
 gem 'sqlite3', '~> 1.7'
 
-gem 'jquery-rails'
 gem 'haml-rails'
 gem 'will_paginate', '~> 4.0'
 
-gem 'rmagick', '~> 6.0'
+gem 'image_processing', '~> 1.12'
+gem 'mini_magick'
 
 gem "bootsnap", require: false
 gem "turbo-rails"
@@ -21,4 +21,11 @@ group :development, :test do
   gem "puma"
   gem "logger"
   gem "benchmark"
+  gem 'bullet'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails'
+end
+
+group :development do
+  gem 'brakeman', require: false
 end

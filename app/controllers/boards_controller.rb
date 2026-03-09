@@ -1,75 +1,63 @@
 class BoardsController < ApplicationController
-  # GET /boards
-  # GET /boards.xml
   def index
-    @board  = Board.new
+    @board = Board.new
     @boards = Board.order(created_at: :desc)
-                 .paginate(page: params[:page])
-    respond_to do |format|
-      format.html # index.html.erb
-      #format.xml  { render :xml => @boards }
+               .paginate(page: params[:page], per_page: 10)
+  respond_to do |format|
+      format.html
     end
   end
 
-  # GET /boards/1
-  # GET /boards/1.xml
   def show
     @board = Board.find(params[:id])
-    @posts = @board.posts.paginate :page => params[:page], :order => 'created_at DESC',:per_page => 4
+@posts = @board.posts.order('created_at DESC').paginate(page: params[:page], per_page: 4)
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @board }
+      format.html
     end
   end
 
-  # GET /boards/1/edit
   def edit
     @board = Board.find(params[:id])
   end
 
-  # POST /boards
-  # POST /boards.xml
   def create
-    @board = Board.new(params[:board])
+    @board = Board.new(board_params)
 
     respond_to do |format|
       if @board.save
-        format.html { redirect_to(@board, :notice => 'Board was successfully created. Start adding a post...') }
-        format.xml  { render :xml => @board, :status => :created, :location => @board }
+        format.html { redirect_to(@board, notice: 'Board was successfully created. Start adding a post...') }
       else
         @boards = Board.all
-        format.html { render :action => "index" }
-        format.xml  { render :xml => @board.errors, :status => :unprocessable_entity }
+        format.html { render action: "index" }
       end
     end
   end
 
-  # PUT /boards/1
-  # PUT /boards/1.xml
   def update
     @board = Board.find(params[:id])
 
     respond_to do |format|
-      if @board.update_attributes(params[:board])
-        format.html { redirect_to(@board, :notice => 'Image board was successfully updated.') }
-        format.xml  { head :ok }
+      if @board.update(board_params)
+        format.html { redirect_to(@board, notice: 'Image board was successfully updated.') }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @board.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
       end
     end
   end
 
-  # DELETE /boards/1
-  # DELETE /boards/1.xml
   def destroy
     @board = Board.find(params[:id])
     @board.destroy
 
     respond_to do |format|
       format.html { redirect_to(boards_url) }
-      format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def board_params
+    params.require(:board).permit(:title)
   end
 end

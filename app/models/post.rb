@@ -1,5 +1,6 @@
-class Post < ActiveRecord::Base
-  self.per_page = 4
-  belongs_to :thread
-  validates_presence_of :title, :svg
+class Post < ApplicationRecord
+  belongs_to :board
+
+  validates :title, presence: true
+  validates :svg, presence: true
 end
