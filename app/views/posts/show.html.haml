@@ -1,0 +1,10 @@
+%h1= @post.title
+.board-meta-bar
+  = link_to "‹ Back to Board", board_path(@board), class: "back-link"
+  = link_to "Edit", edit_board_post_path(@board, @post), class: "back-link"
+
+.post-card
+  .post-meta= "Posted #{time_ago_in_words(@post.created_at)} ago"
+  .post-image= image_tag("/posts/image/" + @post.id.to_s)
+  - if @post.description.present?
+    .post-description= @post.description

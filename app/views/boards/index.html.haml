@@ -1,10 +1,10 @@
-#new_board
-  = button "Create new board",:icon=>"ui-icon-document",:id => "new_board_button" unless @board.errors.any?
-  #new_board_form{!@board.errors.any? && :style=>"display:none;"}
-    %h2 new board
-    %p= render 'form'
-%h1 threads
-- @boards.each do |board|
-  %h2= link_to board.title, board
-  %p="created #{distance_of_time_in_words(board.created_at, Time.now)} ago"
-%p= will_paginate @boards
+.board-list
+  - @boards.each do |board|
+    .board-item
+      = link_to board, class: "board-link" do
+        .board-info
+          .board-title= board.title
+          .board-meta= "created #{time_ago_in_words(board.created_at)} ago"
+      .board-actions
+        = link_to "✏️", edit_board_path(board), class: "board-action-icon", title: "Edit"
+        = button_to "🗑️", board_path(board), method: :delete, class: "board-action-icon", title: "Delete", data: {confirm: "Delete this board?"}

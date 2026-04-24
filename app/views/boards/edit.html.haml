@@ -1,7 +1,11 @@
-%h1 Editing image_thread
+%h1= "Edit: " + @board.title
+.board-meta-bar
+  = link_to "‹ Back to Boards", boards_path, class: "back-link"
 
-= render 'form'
+= form_for(@board, html: {class: "board-form"}) do |f|
+  .form-group
+    = f.label :title, "Board Name"
+    = f.text_field :title, placeholder: "Enter board name"
 
-= link_to 'Show', @image_thread
-\|
-= link_to 'Back', image_threads_path
+  .form-actions
+    = f.submit "Update Board"

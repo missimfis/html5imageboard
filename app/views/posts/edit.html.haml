@@ -1,0 +1,20 @@
+%h1= "Edit: " + @post.title
+.board-meta-bar
+  = link_to "‹ Back to Board", board_path(@board), class: "back-link"
+
+= form_for(@post, url: board_post_path(@board, @post), html: {class: "post-form"}) do |f|
+  .form-group
+    = f.label :title
+    = f.text_field :title, placeholder: "Enter post title"
+
+  .form-group
+    = f.label :description
+    = f.text_area :description, placeholder: "Enter description", rows: 4
+
+  .form-group
+    = f.label :svg, "Redraw your image"
+    %canvas#drawbox{width: "600", height: "400", data: {drawbox: "true", load_image: "/posts/image/" + @post.id.to_s}}
+    %input#drawbox-data{type: "hidden", name: "drawbox-data", value: @post.svg}
+
+  .form-actions
+    = f.submit "Update Post"

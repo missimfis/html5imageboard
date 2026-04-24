@@ -1,13 +1,16 @@
-= form_for([@board, @board.posts.build], :html =>{:class => "ib-form"}) do |f|
-  .field
-    = f.label "Title"
-    = f.text_field :title
-    %br
-    %canvas{:id=>"drawbox",:width=>"500",:height=>"300"}
-    = #%button{:id=>"drawbox-clear"} Clear
-    %br
-    = f.label "Description"
-    = f.text_area :description, :rows => "4", :cols => "6"
-    %br
-    %br
-    = f.submit 'Create post'
+= form_for([@board, @board.posts.build], html: {class: "post-form"}) do |f|
+  .form-group
+    = f.label :title
+    = f.text_field :title, placeholder: "Enter post title"
+
+  .form-group
+    = f.label :description
+    = f.text_area :description, placeholder: "Enter description", rows: 4
+
+  .form-group
+    = f.label :svg, "Draw your image"
+    %canvas#drawbox{width: "600", height: "400", data: {drawbox: "true"}}
+    %input#drawbox-data{type: "hidden", name: "drawbox-data"}
+
+  .form-actions
+    = f.submit "Create Post"

@@ -1,4 +1,10 @@
-.post
-  %h3= post.title
-  %p= image_tag "/posts/image/"+post.id.to_s
-  %p= post.description
+.post-card
+  .post-header
+    .post-title= post.title
+    .post-actions
+      = link_to "✏️", edit_board_post_path(post.board, post), class: "post-action-icon", title: "Edit"
+      = button_to "🗑️", board_post_path(post.board, post), method: :delete, class: "post-action-icon", title: "Delete", data: {confirm: "Delete this post?"}
+  .post-meta= time_ago_in_words(post.created_at) + " ago"
+  .post-image= image_tag("/posts/image/" + post.id.to_s)
+  - if post.description.present?
+    .post-description= post.description

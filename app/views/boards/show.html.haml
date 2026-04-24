@@ -1,9 +1,16 @@
 %h1= @board.title
-%p="created #{distance_of_time_in_words(@board.created_at, Time.now)} ago"
+.board-meta-bar
+  .meta= "Created #{time_ago_in_words(@board.created_at)} ago"
+  = link_to "‹ All Boards", boards_path, class: "back-link"
+
 #posts
-  = render :partial => "posts/post", :collection => @posts
-  = will_paginate @posts
-= button "Add new post", :icon => "ui-icon-plusthick", :id => "new_post_button"
-#new_post_form{:style=>"display:none;"}
-  %h2 new post
-  %p= render 'posts/form'
+  = render partial: "posts/post", collection: @posts
+
+= will_paginate @posts
+
+%button#new_post_button.secondary{type: "button"}
+  = "＋ Add Post"
+
+#new_post_form{style: "display:none;"}
+  %h2 New Post
+  = render partial: "posts/form", locals: { post: @board.posts.build }

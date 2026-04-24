@@ -1,11 +1,14 @@
-= form_for @board, :html =>{:class => "ib-form"} do |f|
-  -if @board.errors.any?
-    #error_explanation.ui-state-error.ui-corner-all{:style=>"padding: 0.7em;"}
-      %span.ui-icon.ui-icon-alert{:style=>"float: left; margin-right: .3em;"}
-      %h2= "#{pluralize(@board.errors.count, "error")} prohibited this board from being saved:"
+= form_for(@board, html: {class: "board-form"}) do |f|
+  - if @board.errors.any?
+    .error-explanation
+      %h3= "#{pluralize(@board.errors.count, "error")} prohibited this board from being saved:"
       %ul
         - @board.errors.full_messages.each do |msg|
           %li= msg
-  .field
-    = f.text_field :title
-    = f.submit 'Create thread'
+
+  .form-group
+    = f.label :title, "Board Name"
+    = f.text_field :title, placeholder: "Enter board name"
+
+  .form-actions
+    = f.submit "Create Board"
