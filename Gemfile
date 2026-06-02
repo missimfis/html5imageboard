@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 7.2.0'
 gem 'sprockets-rails'
 
-gem 'nokogiri', '1.19.1'
+gem 'nokogiri', '1.19.3'
 gem 'sqlite3', '~> 1.7'
 
 gem 'haml-rails'
