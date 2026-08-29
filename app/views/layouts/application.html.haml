@@ -3,7 +3,7 @@
     %title Html5imageboard
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
     = stylesheet_link_tag "application", "pagy", media: "all"
-    = javascript_include_tag "application", "drawbox"
+    = javascript_importmap_tags
     = csrf_meta_tag
 
   %body
@@ -14,8 +14,8 @@
 
     #container
       - if notice
-        .flash.flash-notice= notice
+        .flash.flash-notice{data: {controller: "flash"}}= notice
       - if alert
-        .flash.flash-alert= alert
+        .flash.flash-alert{data: {controller: "flash"}}= alert
 
       = yield

@@ -16,6 +16,10 @@ module Html5imageboard
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # The app renders images client-side via the drawing canvas, so Active
+    # Storage variants are not used.
+    config.active_storage.variant_processor = :disabled
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

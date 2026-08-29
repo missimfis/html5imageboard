@@ -39,7 +39,7 @@ class PostsController < ApplicationController
   end
 
   def image
-    post = Post.find(params[:id])
+    post = Post.find(params.expect(:id))
     image_data = fetch_image_data(post)
     return head :not_found unless image_data
 
@@ -56,11 +56,11 @@ class PostsController < ApplicationController
   end
 
   def set_board
-    @board = Board.find(params[:board_id])
+    @board = Board.find(params.expect(:board_id))
   end
 
   def set_post
-    @post = @board.posts.find(params[:id])
+    @post = @board.posts.find(params.expect(:id))
   end
 
   def post_params

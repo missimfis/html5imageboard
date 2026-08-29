@@ -8,8 +8,9 @@
 
 != @pagy.series_nav
 
-%button#new_post_button.secondary{type: "button"} ＋ Add Post
+.toggle-section{data: {controller: "toggle"}}
+  %button#new_post_button.secondary{type: "button", data: {action: "click->toggle#toggle", toggle_target: "button", toggle_hidden_text_value: "＋ Add Post", toggle_shown_text_value: "Cancel"}} ＋ Add Post
 
-#new_post_form.hidden
-  %h2 New Post
-  = render partial: "posts/form", locals: {post: @board.posts.build}
+  #new_post_form.hidden{data: {toggle_target: "content"}}
+    %h2 New Post
+    = render partial: "posts/form", locals: {post: @board.posts.build}

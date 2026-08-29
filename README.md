@@ -15,8 +15,9 @@ A modern image board application built with Ruby on Rails 8.1, featuring drawing
 - **Ruby**: 3.4+ (see `.ruby-version`)
 - **Rails**: 8.1
 - **Database**: SQLite (development/test), SQLite 3 (production)
-- **Asset Pipeline**: Propshaft
+- **Asset Pipeline**: Propshaft + Importmap
 - **Frontend**: Turbo + Stimulus, custom JS (drawbox canvas)
+- **Caching**: Solid Cache (durable SQLite-backed store in production)
 - **Templates**: Haml
 - **Pagination**: Pagy
 - **Code Quality**: RuboCop, Brakeman

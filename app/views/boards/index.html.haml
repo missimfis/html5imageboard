@@ -1,10 +1,11 @@
 %h1 Boards
-.board-actions-header
-  %button#new_board_button.secondary{type: "button"} ＋ Add Board
+.toggle-section{data: {controller: "toggle"}}
+  .board-actions-header
+    %button#new_board_button.secondary{type: "button", data: {action: "click->toggle#toggle", toggle_target: "button", toggle_hidden_text_value: "＋ Add Board", toggle_shown_text_value: "Cancel"}} ＋ Add Board
 
-#new_board_form.hidden
-  %h2 New Board
-  = render "form"
+  #new_board_form.hidden{data: {toggle_target: "content"}}
+    %h2 New Board
+    = render "form"
 
 .board-list
   - @boards.each do |board|

@@ -216,16 +216,6 @@ function initDrawBox() {
       existingData: existingData ? existingData.value : null
     });
   }
-
-  const newPostBtn = document.getElementById('new_post_button');
-  const newPostForm = document.getElementById('new_post_form');
-  if (newPostBtn && newPostForm) {
-    newPostBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const hidden = newPostForm.classList.toggle('hidden');
-      newPostBtn.textContent = hidden ? '＋ Add Post' : 'Cancel';
-    });
-  }
 }
 
 document.addEventListener('DOMContentLoaded', initDrawBox);
