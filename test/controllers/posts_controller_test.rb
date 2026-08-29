@@ -53,4 +53,21 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "image/png", response.media_type
   end
+
+  test "image endpoint returns not found for missing post" do
+    get post_image_url(999_999_999)
+    assert_response :not_found
+  end
+
+  test "image endpoint returns not found for undecodable svg" do
+    post = posts(:hello)
+    post.update!(svg: "not-a-png")
+    get post_image_url(post)
+    assert_response :not_found
+  end
+
+  test "image endpoint sets long-lived cache headers" do
+    get post_image_url(posts(:hello))
+    assert_includes response.headers["Cache-Control"], "max-age="
+  end
 end

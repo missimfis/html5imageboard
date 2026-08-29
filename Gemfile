@@ -9,9 +9,6 @@ gem "sqlite3", ">= 2.9.5", "< 3.0"
 gem "haml-rails"
 gem "pagy"
 
-gem "image_processing", "~> 1.12"
-gem "mini_magick"
-
 gem "benchmark"
 gem "bootsnap", require: false
 gem "logger"

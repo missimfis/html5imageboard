@@ -17,4 +17,4 @@
         = link_to "✏️", edit_board_path(board), class: "board-action-icon", title: "Edit"
         = button_to "🗑️", board_path(board), method: :delete, class: "board-action-icon", title: "Delete", data: {confirm: "Delete this board?"}
 
-== @pagy.series_nav
+!= @pagy.series_nav

@@ -43,4 +43,19 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to boards_url
   end
+
+  test "index renders pagination" do
+    12.times { |i| Board.create!(title: "Board #{i}") }
+    get boards_url
+    assert_response :success
+    assert_select "nav"
+  end
+
+  test "show renders pagination for many posts" do
+    board = boards(:music)
+    9.times { |i| Post.create!(board: board, title: "Post #{i}", svg: "iVBORw0KGgo") }
+    get board_url(board)
+    assert_response :success
+    assert_select "nav"
+  end
 end

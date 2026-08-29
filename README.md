@@ -18,7 +18,6 @@ A modern image board application built with Ruby on Rails 8.1, featuring drawing
 - **Asset Pipeline**: Propshaft
 - **Frontend**: Turbo + Stimulus, custom JS (drawbox canvas)
 - **Templates**: Haml
-- **Image Processing**: MiniMagick + ImageMagick
 - **Pagination**: Pagy
 - **Code Quality**: RuboCop, Brakeman
 - **Tests**: Minitest with fixtures
@@ -26,28 +25,7 @@ A modern image board application built with Ruby on Rails 8.1, featuring drawing
 ## Requirements
 
 - Ruby 3.4+
-- ImageMagick
 - SQLite development libraries
-
-### Installing ImageMagick
-
-**macOS** (Homebrew):
-```bash
-brew install imagemagick
-```
-
-**Ubuntu/Debian**:
-```bash
-sudo apt install imagemagick libmagickwand-dev
-```
-
-**Arch Linux**:
-```bash
-sudo pacman -S imagemagick
-```
-
-**Windows**:
-Download from [ImageMagick website](https://imagemagick.org/script/download.php#windows)
 
 ## Installation
 
@@ -77,6 +55,12 @@ bin/rails server
 ### Credentials
 
 Encrypted credentials live in `config/credentials.yml.enc` (the decryption key `config/master.key` is gitignored). Point `RAILS_MASTER_KEY` at the key, or run `bin/rails credentials:edit` locally to inspect the contents.
+
+### Production
+
+- Set `APP_HOSTS` to the comma-separated list of allowed hostnames (the Host header allowlist defaults to `localhost,127.0.0.1`).
+- Requests are forced over HTTPS (`force_ssl` / `assume_ssl`); terminate TLS at a reverse proxy.
+- The SQLite database path defaults to `db/production.sqlite3`; override with `SQLITE_DATABASE`.
 
 ## Usage
 

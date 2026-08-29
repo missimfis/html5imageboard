@@ -8,8 +8,8 @@
     = f.text_area :description, placeholder: "Enter description", rows: 4
 
   .form-group
-    = f.label :svg, "Draw your image"
-    %canvas#drawbox{width: "600", height: "400", data: {drawbox: "true"}}
+    %label{for: "drawbox"} Draw your image
+    %canvas#drawbox{width: "600", height: "400"}
     %input#drawbox-data{type: "hidden", name: "drawbox_data"}
 
   .form-actions

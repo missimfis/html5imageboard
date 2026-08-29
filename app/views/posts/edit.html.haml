@@ -12,8 +12,8 @@
     = f.text_area :description, placeholder: "Enter description", rows: 4
 
   .form-group
-    = f.label :svg, "Redraw your image"
-    %canvas#drawbox{width: "600", height: "400", data: {drawbox: "true", load_image: "/posts/image/#{@post.id}"}}
+    %label{for: "drawbox"} Redraw your image
+    %canvas#drawbox{width: "600", height: "400", data: {load_image: "/posts/image/#{@post.id}"}}
     %input#drawbox-data{type: "hidden", name: "drawbox_data", value: @post.svg}
 
   .form-actions

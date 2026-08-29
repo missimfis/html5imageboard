@@ -1,6 +1,8 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: %i[show edit update destroy]
 
+  rate_limit to: 10, within: 1.minute, only: :create
+
   def index
     @board = Board.new
     load_boards

@@ -6,7 +6,7 @@
 #posts
   = render partial: "posts/post", collection: @posts
 
-== @pagy.series_nav
+!= @pagy.series_nav
 
 %button#new_post_button.secondary{type: "button"} ＋ Add Post
 
