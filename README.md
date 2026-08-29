@@ -1,6 +1,6 @@
 # HTML5 Image Board
 
-A modern image board application built with Ruby on Rails 7.2, featuring drawing canvas functionality where users can create and share images.
+A modern image board application built with Ruby on Rails 8.1, featuring drawing canvas functionality where users can create and share images.
 
 ## Features
 
@@ -8,15 +8,20 @@ A modern image board application built with Ruby on Rails 7.2, featuring drawing
 - **Drawing Canvas**: Built-in canvas with color picker and brush size selector
 - **Full CRUD**: Create, read, update, and delete boards and posts
 - **Modern UI**: Dark theme inspired by GitHub's design
-- **Pagination**: Navigate through boards and posts easily
+- **Pagination**: Pagy-powered navigation through boards and posts
 
 ## Tech Stack
 
-- **Ruby**: 3.4+
-- **Rails**: 7.2.3
-- **Database**: SQLite (development), PostgreSQL (production)
-- **Styling**: Custom CSS with CSS variables
+- **Ruby**: 3.4+ (see `.ruby-version`)
+- **Rails**: 8.1
+- **Database**: SQLite (development/test), SQLite 3 (production)
+- **Asset Pipeline**: Propshaft
+- **Frontend**: Turbo + Stimulus, custom JS (drawbox canvas)
+- **Templates**: Haml
 - **Image Processing**: MiniMagick + ImageMagick
+- **Pagination**: Pagy
+- **Code Quality**: RuboCop, Brakeman
+- **Tests**: Minitest with fixtures
 
 ## Requirements
 
@@ -54,25 +59,29 @@ cd html5imageboard
 
 2. Install dependencies:
 ```bash
-bundle install
+bin/setup
 ```
 
 3. Set up the database:
 ```bash
-rails db:migrate
+bin/rails db:migrate
 ```
 
 4. Start the server:
 ```bash
-rails server
+bin/rails server
 ```
 
 5. Open your browser to http://localhost:3000
 
+### Credentials
+
+Encrypted credentials live in `config/credentials.yml.enc` (the decryption key `config/master.key` is gitignored). Point `RAILS_MASTER_KEY` at the key, or run `bin/rails credentials:edit` locally to inspect the contents.
+
 ## Usage
 
 ### Creating a Board
-1. Click "+ New Board" on the main page
+1. Click "+ Add Board" on the main page
 2. Enter a board name (e.g., "Artwork", "Sketches")
 3. Click "Create Board"
 
@@ -93,9 +102,8 @@ rails server
 html5imageboard/
 ├── app/
 │   ├── assets/
-│   │   ├── config/       # Asset manifest
 │   │   ├── javascripts/  # JS (drawbox canvas)
-│   │   └── stylesheets/  # CSS
+│   │   └── stylesheets/  # CSS (incl. bundled pagy.css)
 │   ├── controllers/      # Rails controllers
 │   ├── models/          # ActiveRecord models
 │   └── views/           # Haml templates
@@ -104,8 +112,10 @@ html5imageboard/
 │   └── routes.rb        # Routing
 ├── db/
 │   └── migrate/        # Database migrations
-└── public/
-    └── images/         # Static images
+└── test/
+    ├── controllers/    # Controller tests
+    ├── fixtures/       # Test fixtures
+    └── models/         # Model tests
 ```
 
 ## Contributing
@@ -113,7 +123,7 @@ html5imageboard/
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
-4. Run tests if any exist
+4. Run tests (`bin/rails test`)
 5. Commit your changes (`git commit -m "Add amazing feature"`)
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
@@ -121,13 +131,18 @@ html5imageboard/
 ### Coding Standards
 
 This project follows Rails conventions and uses:
-- **RuboCop** for linting
+- **RuboCop** (with `rubocop-rails`) for linting
 - **Haml** for templates
-- Symbol syntax (not hash rockets)
+- Symbol bracket syntax (no hash rockets)
 
 Run linting:
 ```bash
 bundle exec rubocop
+```
+
+Run the test suite:
+```bash
+bin/rails test
 ```
 
 Run security check:
