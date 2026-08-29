@@ -1,9 +1,9 @@
-Html5imageboard::Application.routes.draw do
-  resources :boards, only: [:index, :show, :create, :edit, :update, :destroy] do
+Rails.application.routes.draw do
+  resources :boards, only: %i[index show create edit update destroy] do
     resources :posts
   end
 
-  get "posts/image/:id", to: "posts#image"
+  get "posts/image/:id", to: "posts#image", as: :post_image
 
-  root to: "boards#index"
+  root "boards#index"
 end

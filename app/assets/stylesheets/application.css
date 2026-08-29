@@ -659,3 +659,6 @@ button.secondary:hover, input[type="submit"].secondary:hover {
     gap: 0.5rem;
   }
 }
+.hidden {
+  display: none;
+}

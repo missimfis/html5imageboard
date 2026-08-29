@@ -5,6 +5,6 @@
 
 .post-card
   .post-meta= "Posted #{time_ago_in_words(@post.created_at)} ago"
-  .post-image= image_tag("/posts/image/" + @post.id.to_s)
+  .post-image= image_tag("/posts/image/#{@post.id}")
   - if @post.description.present?
     .post-description= @post.description

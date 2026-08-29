@@ -1,80 +1,74 @@
 class PostsController < ApplicationController
+  before_action :set_board, except: :image
+  before_action :set_post, only: %i[show edit update destroy]
+
+  def show; end
+
+  def edit; end
+
   def create
-    params[:post][:svg] = params["drawbox-data"]
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.create(post_params)
-    if @post.invalid?
-      redirect_to board_path(@board), alert: "can't add post!"
+    @post = @board.posts.new(post_params.merge(svg: params[:drawbox_data]))
+
+    if @post.save
+      redirect_to board_path(@board), notice: t("posts.created")
     else
-      redirect_to board_path(@board), notice: "Post created!"
+      redirect_to board_path(@board), alert: t("posts.create_failed")
     end
-  end
-
-  def show
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
-  end
-
-  def edit
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
   end
 
   def update
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
+    attributes = post_params
+    attributes[:svg] = params[:drawbox_data] if params[:drawbox_data].present?
 
-    if params["drawbox-data"].present?
-      @post.svg = params["drawbox-data"]
-    end
-
-    if @post.update(post_params)
-      redirect_to board_path(@board), notice: "Post updated!"
+    if @post.update(attributes)
+      redirect_to board_path(@board), notice: t("posts.updated")
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 
   def destroy
-    @board = Board.find(params[:board_id])
-    @post = @board.posts.find(params[:id])
     @post.destroy
-    redirect_to board_path(@board), notice: "Post deleted!"
+    redirect_to board_path(@board), notice: t("posts.destroyed")
   end
 
   def image
-    cache_key = "img-" + params[:id]
-    img_data = Rails.cache.read(cache_key)
+    post = Post.find(params[:id])
+    image_data = fetch_image_data(post)
+    return head :not_found unless image_data
 
-    unless img_data
-      post = Post.find(params[:id])
-      img_data = decode_image(post.svg)
-      Rails.cache.write(cache_key, img_data)
-    end
-
-    send_data img_data, type: "image/png", disposition: "inline"
+    send_data image_data, type: "image/png", disposition: "inline"
   end
 
   private
 
+  def fetch_image_data(post)
+    Rails.cache.fetch("img-#{post.id}-#{post.updated_at.to_i}", expires_in: 1.hour) do
+      decode_image(post.svg)
+    end
+  end
+
+  def set_board
+    @board = Board.find(params[:board_id])
+  end
+
+  def set_post
+    @post = @board.posts.find(params[:id])
+  end
+
   def post_params
-    params.require(:post).permit(:title, :svg, :description)
+    params.expect(post: %i[title svg description])
   end
 
   def decode_image(svg_or_base64)
     return nil if svg_or_base64.blank?
 
-    if svg_or_base64.start_with?("data:image/png;base64,")
+    if svg_or_base64.start_with?("data:image/png;base64,") || svg_or_base64.start_with?("iVBOR")
       Base64.decode64(svg_or_base64.sub("data:image/png;base64,", ""))
-    elsif svg_or_base64.start_with?("iVBORw0KGgo", "iVBOR")
-      Base64.decode64(svg_or_base64)
     else
-      require "mini_magick"
-      image = MiniMagick::Image.read(svg_or_base64)
-      image.format("png")
-      image.to_blob
+      MiniMagick::Image.read(svg_or_base64).format("png").to_blob
     end
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "Image decode error: #{e.message}"
     nil
   end

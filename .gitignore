@@ -1,4 +1,10 @@
 .bundle
+vendor/bundle
 db/*.sqlite3
 log/*.log
 tmp/**/*
+
+# Ignore key files for decrypting credentials and more.
+/config/*.key
+
+config/master.key

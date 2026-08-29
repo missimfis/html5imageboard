@@ -1,5 +1,7 @@
 class Board < ApplicationRecord
-  validates :title, uniqueness: true, presence: true
-
   has_many :posts, dependent: :destroy
+
+  validates :title, presence: true, uniqueness: true
+
+  scope :newest, -> { order(created_at: :desc) }
 end

@@ -41,7 +41,6 @@ class DrawBox {
 
     this.loadExistingImage();
     this.setupEvents();
-    this.setupToggle();
   }
 
   loadExistingImage() {
@@ -131,20 +130,6 @@ class DrawBox {
     this.canvas.style.display = 'block';
     this.canvas.style.backgroundColor = '#1c2128';
     this.canvas.style.borderRadius = '8px';
-  }
-
-  setupToggle() {
-    const toggleBtn = document.getElementById('new_post_button');
-    const form = document.getElementById('new_post_form');
-    if (toggleBtn && form) {
-      toggleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const isHidden = form.style.display === 'none';
-        form.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.textContent = isHidden ? 'Cancel' : '+ Add Post';
-      });
-    }
   }
 
   setupEvents() {
@@ -237,9 +222,8 @@ function initDrawBox() {
   if (newPostBtn && newPostForm) {
     newPostBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const isHidden = newPostForm.style.display === 'none';
-      newPostForm.style.display = isHidden ? 'block' : 'none';
-      newPostBtn.textContent = isHidden ? 'Cancel' : '+ Add Post';
+      const hidden = newPostForm.classList.toggle('hidden');
+      newPostBtn.textContent = hidden ? '＋ Add Post' : 'Cancel';
     });
   }
 }

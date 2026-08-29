@@ -1,4 +1,4 @@
-= form_for(@board, html: {class: "board-form"}) do |f|
+= form_with(model: @board, class: "board-form") do |f|
   - if @board.errors.any?
     .error-explanation
       %h3= "#{pluralize(@board.errors.count, "error")} prohibited this board from being saved:"
@@ -11,4 +11,4 @@
     = f.text_field :title, placeholder: "Enter board name"
 
   .form-actions
-    = f.submit "Create Board"
+    = f.submit @board.persisted? ? "Update Board" : "Create Board"

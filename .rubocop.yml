@@ -1,3 +1,19 @@
+plugins:
+  - rubocop-rails
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.4
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - db/migrate/**

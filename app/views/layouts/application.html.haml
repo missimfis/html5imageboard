@@ -2,20 +2,20 @@
   %head
     %title Html5imageboard
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
-    = stylesheet_link_tag "application", media: "all"
+    = stylesheet_link_tag "application", "pagy", media: "all"
     = javascript_include_tag "application", "drawbox"
     = csrf_meta_tag
 
   %body
     %header
-      = link_to boards_path, class: "logo" do
+      = link_to root_path, class: "logo" do
         %img{src: "/images/logo.png", alt: "Logo"}
         %span ImageBoard
 
     #container
       - if notice
-        .flash-notice= notice
+        .flash.flash-notice= notice
       - if alert
-        .flash-alert= alert
+        .flash.flash-alert= alert
 
       = yield

@@ -1,4 +1,4 @@
-= form_for([@board, @board.posts.build], html: {class: "post-form"}) do |f|
+= form_with(model: [@board, post], class: "post-form") do |f|
   .form-group
     = f.label :title
     = f.text_field :title, placeholder: "Enter post title"
@@ -10,7 +10,7 @@
   .form-group
     = f.label :svg, "Draw your image"
     %canvas#drawbox{width: "600", height: "400", data: {drawbox: "true"}}
-    %input#drawbox-data{type: "hidden", name: "drawbox-data"}
+    %input#drawbox-data{type: "hidden", name: "drawbox_data"}
 
   .form-actions
     = f.submit "Create Post"

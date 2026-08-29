@@ -1,0 +1,9 @@
+general:
+  title: "General Discussion"
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
+music:
+  title: "Music"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

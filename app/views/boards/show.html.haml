@@ -6,11 +6,10 @@
 #posts
   = render partial: "posts/post", collection: @posts
 
-= will_paginate @posts
+== @pagy.series_nav
 
-%button#new_post_button.secondary{type: "button"}
-  = "＋ Add Post"
+%button#new_post_button.secondary{type: "button"} ＋ Add Post
 
-#new_post_form{style: "display:none;"}
+#new_post_form.hidden
   %h2 New Post
-  = render partial: "posts/form", locals: { post: @board.posts.build }
+  = render partial: "posts/form", locals: {post: @board.posts.build}

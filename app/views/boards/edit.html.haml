@@ -2,10 +2,4 @@
 .board-meta-bar
   = link_to "‹ Back to Boards", boards_path, class: "back-link"
 
-= form_for(@board, html: {class: "board-form"}) do |f|
-  .form-group
-    = f.label :title, "Board Name"
-    = f.text_field :title, placeholder: "Enter board name"
-
-  .form-actions
-    = f.submit "Update Board"
+= render "form"
