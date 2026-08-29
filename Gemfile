@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '~> 7.2.0'
 gem 'sprockets-rails'
 
-gem 'nokogiri', '1.19.3'
-gem 'sqlite3', '~> 1.7'
+gem 'nokogiri', '~> 1.19.4'
+gem 'sqlite3', '>= 2.9.5', '< 3.0'
 
 gem 'haml-rails'
 gem 'will_paginate', '~> 4.0'
