@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "propshaft"
 gem "rails", "~> 8.1.0"
 
-gem "nokogiri", "~> 1.19.4"
+gem "nokogiri", "~> 1.19.5"
 gem "sqlite3", ">= 2.9.5", "< 3.0"
 
 gem "haml-rails"
