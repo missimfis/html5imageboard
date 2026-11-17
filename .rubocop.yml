@@ -3,7 +3,8 @@ plugins:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 4.0
+  SuggestExtensions: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false
