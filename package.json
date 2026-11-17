@@ -1,0 +1,14 @@
+{
+  "name": "html5imageboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A drawing-first image board built with Ruby on Rails, Tailwind CSS and daisyUI.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/missimfis/html5imageboard.git"
+  },
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "daisyui": "^5.8.1"
+  }
+}
