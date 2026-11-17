@@ -1,0 +1,11 @@
+.drawbox.space-y-3{data: {controller: "drawbox", drawbox_restore_url_value: drawbox_restore_url(post)}}
+  .drawbox-toolbar{data: {drawbox_target: "toolbar"}, role: "toolbar", aria: {label: "Drawing tools"}}
+    %noscript
+      %p.p-2.text-xs{class: "text-base-content/60"} JavaScript is required to draw. Please enable it to create a post.
+  .drawbox-stage
+    %canvas#drawbox.drawbox-canvas{width: "600", height: "400", tabindex: "0", role: "img", aria: {label: "Drawing canvas. Use a mouse, finger, or stylus to draw. Pick a stamp to add a shape. Press Control or Command plus Z to undo.", keyshortcuts: "Control+Z Meta+Z"}, data: {drawbox_target: "canvas", tool: "pen"}}
+  %input#drawbox-data{type: "hidden", name: "drawbox_data", value: post.image_data, data: {drawbox_target: "input"}}
+  .flex.flex-wrap.items-center.justify-between.gap-2
+    %p.text-xs{class: "text-base-content/50"}
+      Draw with a mouse, finger, or stylus — or stamp a ready-made icon. Stored as a PNG.
+    %span.badge.badge-outline.badge-sm.hidden.sm:inline-flex Ctrl/⌘ + Z to undo
