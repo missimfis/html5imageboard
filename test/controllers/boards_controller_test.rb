@@ -6,6 +6,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h1", "Boards"
     assert_select ".board-title", boards(:general).title
+    assert_select ".board-meta", /2 posts/
   end
 
   test "show displays a board and its posts" do
@@ -26,7 +27,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference -> { Board.count } do
       post boards_url, params: { board: { title: "" } }
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select ".error-explanation"
   end
 
@@ -48,14 +49,14 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     12.times { |i| Board.create!(title: "Board #{i}") }
     get boards_url
     assert_response :success
-    assert_select "nav"
+    assert_select "nav.pagy"
   end
 
   test "show renders pagination for many posts" do
     board = boards(:music)
-    9.times { |i| Post.create!(board: board, title: "Post #{i}", svg: "iVBORw0KGgo") }
+    9.times { |i| Post.create!(board: board, title: "Post #{i}", image_data: "iVBORw0KGgo") }
     get board_url(board)
     assert_response :success
-    assert_select "nav"
+    assert_select "nav.pagy"
   end
 end

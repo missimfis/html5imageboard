@@ -1,7 +1,7 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: %i[show edit update destroy]
 
-  rate_limit to: 10, within: 1.minute, only: :create
+  rate_limit to: 10, within: 1.minute, only: %i[create update destroy]
 
   def index
     @board = Board.new
@@ -9,7 +9,8 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @pagy, @posts = pagy(:offset, @board.posts.newest, limit: 4)
+    @post = @board.posts.build
+    load_posts
   end
 
   def edit; end
@@ -35,7 +36,7 @@ class BoardsController < ApplicationController
 
   def destroy
     @board.destroy
-    redirect_to boards_url, notice: t("boards.destroyed")
+    redirect_to boards_url, notice: t("boards.destroyed"), status: :see_other
   end
 
   private
@@ -45,10 +46,14 @@ class BoardsController < ApplicationController
   end
 
   def board_params
-    params.expect(board: [:title])
+    params.expect(board: %i[title])
   end
 
   def load_boards
-    @pagy, @boards = pagy(:offset, Board.newest, limit: 10)
+    @pagy, @boards = pagy(:offset, Board.newest, limit: BOARDS_PER_PAGE)
+  end
+
+  def load_posts
+    @pagy, @posts = pagy(:offset, @board.posts.newest, limit: POSTS_PER_PAGE)
   end
 end
