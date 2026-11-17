@@ -7,5 +7,8 @@ Rails.application.routes.draw do
 
   get "posts/image/:id", to: "posts#image", as: :post_image
 
+  get "/sitemap.xml", to: "sitemaps#index", as: :sitemap, defaults: { format: "xml" }
+  get "/robots.txt", to: "robots#show", as: :robots, defaults: { format: "txt" }
+
   root "boards#index"
 end

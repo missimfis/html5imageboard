@@ -1,0 +1,22 @@
+!!! XML
+%urlset{xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9"}
+  %url
+    %loc= root_url
+    %changefreq daily
+    %priority 1.0
+  %url
+    %loc= boards_url
+    %changefreq daily
+    %priority 0.9
+  - @boards.each do |board|
+    %url
+      %loc= board_url(board)
+      %lastmod= board.updated_at.xmlschema
+      %changefreq weekly
+      %priority 0.7
+  - @posts.each do |post|
+    %url
+      %loc= board_post_url(post.board, post)
+      %lastmod= post.updated_at.xmlschema
+      %changefreq monthly
+      %priority 0.5
