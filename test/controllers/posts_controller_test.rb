@@ -13,11 +13,13 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to board_url(@board)
   end
 
-  test "create post without image shows alert" do
+  test "create post without image re-renders the board with errors" do
     assert_no_difference -> { @board.posts.count } do
       post board_posts_url(@board), params: { post: { title: "Sketch" } }
     end
-    assert_redirected_to board_url(@board)
+    assert_response :unprocessable_content
+    assert_select ".error-explanation"
+    assert_select "#new_post_form:not([hidden])"
   end
 
   test "show a post" do
@@ -38,7 +40,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     patch board_post_url(@board, post),
           params: { post: { title: "Redrawn" }, drawbox_data: "iVBORw0KGgoAAAANSUhEUg==" }
     assert_redirected_to board_url(@board)
-    assert_equal "iVBORw0KGgoAAAANSUhEUg==", post.reload.svg
+    assert_equal "iVBORw0KGgoAAAANSUhEUg==", post.reload.image_data
   end
 
   test "delete a post" do
@@ -59,9 +61,16 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "image endpoint returns not found for undecodable svg" do
+  test "image endpoint returns not found for undecodable data" do
     post = posts(:hello)
-    post.update!(svg: "not-a-png")
+    post.update!(image_data: "not-a-png")
+    get post_image_url(post)
+    assert_response :not_found
+  end
+
+  test "image endpoint returns not found for non-PNG data" do
+    post = posts(:hello)
+    post.update!(image_data: "data:image/png;base64,aGVsbG8=")
     get post_image_url(post)
     assert_response :not_found
   end
@@ -69,5 +78,6 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "image endpoint sets long-lived cache headers" do
     get post_image_url(posts(:hello))
     assert_includes response.headers["Cache-Control"], "max-age="
+    assert_includes response.headers["Cache-Control"], "immutable"
   end
 end

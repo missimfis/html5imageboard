@@ -1,11 +1,12 @@
 class PostsController < ApplicationController
   PNG_DATA_URI_PREFIX = "data:image/png;base64,".freeze
+  PNG_SIGNATURE = "\x89PNG\r\n\x1A\n".b.freeze
   MAX_DECODED_IMAGE_BYTES = 10.megabytes
 
   before_action :set_board, except: :image
   before_action :set_post, only: %i[show edit update destroy]
 
-  rate_limit to: 10, within: 1.minute, only: %i[create destroy]
+  rate_limit to: 10, within: 1.minute, only: %i[create update destroy]
   rate_limit to: 60, within: 1.minute, only: :image
 
   def show; end
@@ -13,18 +14,19 @@ class PostsController < ApplicationController
   def edit; end
 
   def create
-    @post = @board.posts.new(post_params.merge(svg: params[:drawbox_data]))
+    @post = @board.posts.new(post_params.merge(image_data: image_data_param))
 
     if @post.save
       redirect_to board_path(@board), notice: t("posts.created")
     else
-      redirect_to board_path(@board), alert: t("posts.create_failed")
+      load_posts
+      render "boards/show", status: :unprocessable_content
     end
   end
 
   def update
     attributes = post_params
-    attributes[:svg] = params[:drawbox_data] if params[:drawbox_data].present?
+    attributes[:image_data] = image_data_param if image_data_param.present?
 
     if @post.update(attributes)
       redirect_to board_path(@board), notice: t("posts.updated")
@@ -35,7 +37,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to board_path(@board), notice: t("posts.destroyed")
+    redirect_to board_path(@board), notice: t("posts.destroyed"), status: :see_other
   end
 
   def image
@@ -44,15 +46,19 @@ class PostsController < ApplicationController
     return head :not_found unless image_data
 
     expires_in 1.year, public: true, immutable: true
-    send_data image_data, type: "image/png", disposition: "inline"
+    send_data image_data,
+              type: "image/png",
+              disposition: "inline",
+              filename: "post-#{post.id}.png"
   end
 
   private
 
   def fetch_image_data(post)
-    Rails.cache.fetch("img-#{post.id}-#{post.updated_at.to_i}", expires_in: 1.hour) do
-      decode_image(post.svg)
-    end
+    Rails.cache.fetch(
+      "post-image/#{post.cache_key_with_version}",
+      expires_in: 1.hour
+    ) { decode_image(post.image_data) }
   end
 
   def set_board
@@ -64,21 +70,29 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.expect(post: %i[title svg description])
+    params.expect(post: %i[title description])
   end
 
-  def decode_image(svg_or_base64)
-    return nil unless decodeable_png?(svg_or_base64)
+  def image_data_param
+    params[:drawbox_data].presence
+  end
 
-    png_data = Base64.decode64(svg_or_base64.delete_prefix(PNG_DATA_URI_PREFIX))
-    return nil if png_data.bytesize.zero? || png_data.bytesize > MAX_DECODED_IMAGE_BYTES
+  def load_posts
+    @pagy, @posts = pagy(:offset, @board.posts.newest, limit: POSTS_PER_PAGE)
+  end
+
+  def decode_image(image_data)
+    return nil if image_data.blank?
+
+    encoded = image_data.delete_prefix(PNG_DATA_URI_PREFIX)
+    encoded += "=" * ((4 - (encoded.length % 4)) % 4)
+    png_data = Base64.strict_decode64(encoded)
+
+    return nil unless png_data.bytesize.between?(1, MAX_DECODED_IMAGE_BYTES)
+    return nil unless png_data.start_with?(PNG_SIGNATURE)
 
     png_data
-  end
-
-  def decodeable_png?(svg_or_base64)
-    return false if svg_or_base64.blank?
-
-    svg_or_base64.start_with?(PNG_DATA_URI_PREFIX) || svg_or_base64.start_with?("iVBOR")
+  rescue ArgumentError
+    nil
   end
 end
