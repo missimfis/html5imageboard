@@ -10,33 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_29_225100) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_120200) do
   create_table "boards", force: :cascade do |t|
+    t.string "title", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.string "title"
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "posts_count", default: 0, null: false
+    t.index ["created_at"], name: "index_boards_on_created_at"
     t.index ["title"], name: "index_boards_on_title", unique: true
   end
 
   create_table "posts", force: :cascade do |t|
-    t.integer "board_id"
+    t.string "image_data", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.integer "board_id", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.string "description"
-    t.string "svg"
-    t.string "title"
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["board_id"], name: "index_posts_on_board_id"
+    t.index ["board_id", "created_at"], name: "index_posts_on_board_id_and_created_at"
     t.index ["created_at"], name: "index_posts_on_created_at"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
-    t.integer "byte_size", limit: 4, null: false
-    t.datetime "created_at", null: false
     t.binary "key", limit: 1024, null: false
-    t.integer "key_hash", limit: 8, null: false
     t.binary "value", limit: 536870912, null: false
+    t.datetime "created_at", null: false
+    t.integer "key_hash", limit: 8, null: false
+    t.integer "byte_size", limit: 4, null: false
     t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
     t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
     t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
+
+  add_foreign_key "posts", "boards"
 end

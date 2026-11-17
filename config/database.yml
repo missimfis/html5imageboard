@@ -10,6 +10,9 @@ development:
     synchronous: NORMAL
     busy_timeout: 5000
     foreign_keys: ON
+    cache_size: 20000
+    temp_store: memory
+    mmap_size: 134217728
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -24,6 +27,9 @@ test:
     synchronous: NORMAL
     busy_timeout: 5000
     foreign_keys: ON
+    cache_size: 20000
+    temp_store: memory
+    mmap_size: 134217728
 
 production:
   adapter: sqlite3
@@ -35,3 +41,6 @@ production:
     synchronous: NORMAL
     busy_timeout: 5000
     foreign_keys: ON
+    cache_size: 20000
+    temp_store: memory
+    mmap_size: 134217728

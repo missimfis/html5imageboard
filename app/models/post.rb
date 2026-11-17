@@ -1,8 +1,17 @@
 class Post < ApplicationRecord
-  belongs_to :board
+  TITLE_MAX_LENGTH = 120
+  DESCRIPTION_MAX_LENGTH = 5_000
 
-  validates :title, presence: true
-  validates :svg, presence: true
+  belongs_to :board, counter_cache: true, touch: true
 
-  scope :newest, -> { order(created_at: :desc) }
+  normalizes :title, with: ->(title) { title.squish }
+  normalizes :description, with: ->(description) { description.strip }
+
+  validates :title,
+            presence: true,
+            length: { maximum: TITLE_MAX_LENGTH }
+  validates :description, length: { maximum: DESCRIPTION_MAX_LENGTH }
+  validates :image_data, presence: true
+
+  scope :newest, -> { order(created_at: :desc, id: :desc) }
 end

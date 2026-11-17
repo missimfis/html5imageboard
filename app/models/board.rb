@@ -1,7 +1,14 @@
 class Board < ApplicationRecord
+  TITLE_MAX_LENGTH = 80
+
   has_many :posts, dependent: :destroy
 
-  validates :title, presence: true, uniqueness: true
+  normalizes :title, with: ->(title) { title.squish }
 
-  scope :newest, -> { order(created_at: :desc) }
+  validates :title,
+            presence: true,
+            uniqueness: { case_sensitive: false },
+            length: { maximum: TITLE_MAX_LENGTH }
+
+  scope :newest, -> { order(created_at: :desc, id: :desc) }
 end

@@ -1,4 +1,11 @@
 en:
+  activerecord:
+    errors:
+      models:
+        post:
+          attributes:
+            image_data:
+              blank: "is missing — draw something first"
   boards:
     created: "Board was successfully created. Start adding a post..."
     updated: "Image board was successfully updated."
