@@ -1,21 +1,61 @@
-%h1 Boards
-.toggle-section{data: {controller: "toggle"}}
-  .board-actions-header
-    %button#new_board_button.secondary{type: "button", data: {action: "click->toggle#toggle", toggle_target: "button", toggle_hidden_text_value: "＋ Add Board", toggle_shown_text_value: "Cancel"}} ＋ Add Board
+- content_for(:title) { "Boards" }
+- content_for(:description) { "Browse community drawing boards or start a new one. Every post is a tiny canvas." }
 
-  #new_board_form.hidden{data: {toggle_target: "content"}}
-    %h2 New Board
-    = render "form"
+.toggle-section{data: {controller: "toggle", toggle_hidden_text_value: "New board", toggle_shown_text_value: "Cancel"}}
+  %section.mb-8.flex.flex-col.gap-6.sm:flex-row.sm:items-end.sm:justify-between
+    .max-w-2xl.space-y-4
+      %span.eyebrow Community boards
+      %h1.page-title Boards
+      %p{class: "text-base-content/65 sm:text-lg"} Pick a board or start a new one. Every post is a tiny canvas.
+    .flex.shrink-0
+      %button#new_board_button{class: "btn btn-primary btn-lg gap-2 shadow-lg shadow-primary/20", type: "button", aria: {expanded: (@board.errors.any? ? "true" : "false"), controls: "new_board_form"}, data: {action: "click->toggle#toggle", toggle_target: "button"}}
+        %span.button-icon.button-icon--plus{aria: {hidden: "true"}}= icon(:plus, size: 18)
+        %span.button-icon.button-icon--close{aria: {hidden: "true"}}= icon(:close, size: 18)
+        %span{data: {toggle_target: "label"}} New board
 
-.board-list
-  - @boards.each do |board|
-    .board-item
-      = link_to board, class: "board-link" do
-        .board-info
-          .board-title= board.title
-          .board-meta= "created #{time_ago_in_words(board.created_at)} ago"
-      .board-actions
-        = link_to "✏️", edit_board_path(board), class: "board-action-icon", title: "Edit"
-        = button_to "🗑️", board_path(board), method: :delete, class: "board-action-icon", title: "Delete", data: {confirm: "Delete this board?"}
+  #new_board_form.card.mb-8.border.border-base-300.bg-base-200.shadow-xl{hidden: !@board.errors.any?, data: {toggle_target: "content"}}
+    .card-body
+      .mb-1.flex.items-center.gap-3
+        %span{class: "grid size-10 place-items-center rounded-2xl bg-primary/15 text-primary", aria: {hidden: "true"}}= icon(:plus, size: 20)
+        %h2.card-title.text-xl Start a board
+      = render "form"
 
-!= @pagy.series_nav
+  - if @boards.empty?
+    %div{class: "card border-2 border-dashed border-base-300 bg-base-200/40"}
+      .card-body.items-center.gap-4.py-14.text-center
+        %span{class: "grid size-14 place-items-center rounded-3xl bg-base-200 text-base-content/40", aria: {hidden: "true"}}= icon(:board, size: 28)
+        .space-y-2
+          %h2.text-xl.font-bold No boards yet
+          %p{class: "max-w-sm text-sm text-base-content/55"} Boards are where drawings live. Create the first one to get started.
+        %button.btn.btn-primary{type: "button", data: {action: "click->toggle#toggle"}}
+          = icon(:plus, size: 18)
+          Create the first board
+  - else
+    .grid.gap-4.sm:grid-cols-2.xl:grid-cols-3
+      - @boards.each do |board|
+        %article{class: "card board-tile group relative border border-base-300/80 bg-base-200/80 shadow-sm"}
+          .card-body.p-5
+            .flex.items-start.gap-4
+              %span.board-avatar.bg-linear-to-br{class: board_avatar_tone(board)}= board.title.first.upcase
+              .min-w-0.flex-1
+                %h2.board-title.truncate.text-lg.font-bold
+                  = link_to board.title, board, class: "outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
+                %p{class: "board-meta mt-1 flex flex-wrap items-center gap-x-2 text-xs text-base-content/50"}
+                  %span= pluralize(board.posts_count, "post")
+                  %span{aria: {hidden: "true"}} ·
+                  %span= relative_time(board.updated_at, prefix: "active ")
+            .card-actions.relative.z-10.mt-1.justify-end.gap-1
+              = link_to edit_board_path(board), class: "btn btn-ghost btn-square btn-sm text-base-content/45 hover:text-base-content", title: "Edit board", aria: {label: "Edit board #{board.title}"} do
+                = icon(:pencil, size: 16)
+              = button_to board_path(board), method: :delete, class: "btn btn-ghost btn-square btn-sm text-base-content/45 hover:bg-error/10 hover:text-error", title: "Delete board", aria: {label: "Delete board #{board.title}"}, data: {turbo_confirm: "Delete this board and all of its posts?"} do
+                = icon(:trash, size: 16)
+
+      %button{class: "group flex min-h-44 flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-base-300 bg-base-200/30 p-8 text-base-content/50 transition hover:border-primary/60 hover:bg-primary/5 hover:text-primary", type: "button", data: {action: "click->toggle#toggle"}}
+        %span{class: "grid size-12 place-items-center rounded-2xl border border-base-300 bg-base-200 transition group-hover:border-primary/40 group-hover:bg-primary/10", aria: {hidden: "true"}}
+          = icon(:plus, size: 22)
+        %span.text-center
+          %span.block.text-sm.font-bold New board
+          %span{class: "mt-1 block text-xs text-base-content/40"} Start a fresh canvas
+
+  - if @pagy.pages > 1
+    != @pagy.series_nav

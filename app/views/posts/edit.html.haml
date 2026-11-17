@@ -1,20 +1,17 @@
-%h1= "Edit: " + @post.title
-.board-meta-bar
-  = link_to "‹ Back to Board", board_path(@board), class: "back-link"
+- content_for(:title) { "Edit: #{@post.title}" }
 
-= form_with(model: [@board, @post], class: "post-form") do |f|
-  .form-group
-    = f.label :title
-    = f.text_field :title, placeholder: "Enter post title"
+%nav.breadcrumbs.mb-5.text-sm{class: "text-base-content/50", aria: {label: "Breadcrumb"}}
+  %ul
+    %li= link_to "Boards", boards_path, class: "link link-hover"
+    %li= link_to @board.title, board_path(@board), class: "link link-hover"
+    %li
+      %span{aria: {current: "page"}} Edit drawing
 
-  .form-group
-    = f.label :description
-    = f.text_area :description, placeholder: "Enter description", rows: 4
+%section.mb-8.space-y-4
+  %span.eyebrow Edit drawing
+  %h1.page-title= @post.title
+  %p{class: "text-base-content/55"}= relative_time(@post.updated_at, prefix: "Last updated ")
 
-  .form-group
-    %label{for: "drawbox"} Redraw your image
-    %canvas#drawbox{width: "600", height: "400", data: {load_image: "/posts/image/#{@post.id}"}}
-    %input#drawbox-data{type: "hidden", name: "drawbox_data", value: @post.svg}
-
-  .form-actions
-    = f.submit "Update Post"
+.card.border.border-base-300.bg-base-200.shadow-lg
+  .card-body.p-5.sm:p-7
+    = render "form", post: @post

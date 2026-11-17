@@ -1,16 +1,57 @@
-%h1= @board.title
-.board-meta-bar
-  .meta= "Created #{time_ago_in_words(@board.created_at)} ago"
-  = link_to "‹ All Boards", boards_path, class: "back-link"
+- content_for(:title) { "Board: #{@board.title}" }
+- content_for(:description) { "#{@board.title} — #{pluralize(@board.posts_count, "drawing")} shared on ImageBoard." }
+
+%nav.breadcrumbs.mb-5.text-sm{class: "text-base-content/50", aria: {label: "Breadcrumb"}}
+  %ul
+    %li= link_to "Boards", boards_path, class: "link link-hover"
+    %li
+      %span{aria: {current: "page"}}= @board.title
+
+%section.mb-8.flex.flex-col.gap-5.sm:flex-row.sm:items-start.sm:justify-between
+  .flex.items-start.gap-4
+    %span.board-avatar.size-14.text-xl.bg-linear-to-br{class: board_avatar_tone(@board)}= @board.title.first.upcase
+    .space-y-2
+      %h1.page-title= @board.title
+      .flex.flex-wrap.items-center.gap-2.text-sm{class: "text-base-content/55"}
+        %span.badge.badge-soft.badge-primary.badge-sm
+          = pluralize(@board.posts_count, "drawing")
+        %span{aria: {hidden: "true"}} ·
+        %span= relative_time(@board.updated_at, prefix: "active ")
+  .flex.flex-wrap.items-center.gap-2
+    = link_to edit_board_path(@board), class: "btn btn-outline btn-sm gap-2 sm:btn-md" do
+      = icon(:pencil, size: 16)
+      Edit board
+    = button_to board_path(@board), method: :delete, class: "btn btn-ghost btn-sm gap-2 text-error hover:bg-error/10 sm:btn-md", data: {turbo_confirm: "Delete this board and all of its posts?"} do
+      = icon(:trash, size: 16)
+      Delete board
 
 #posts
-  = render partial: "posts/post", collection: @posts
+  - if @posts.empty?
+    %div{class: "card border-2 border-dashed border-base-300 bg-base-200/40"}
+      .card-body.items-center.gap-4.py-14.text-center
+        %span{class: "grid size-14 place-items-center rounded-3xl bg-base-200 text-base-content/40", aria: {hidden: "true"}}= icon(:image, size: 28)
+        .space-y-2
+          %h2.text-xl.font-bold No drawings yet
+          %p.text-sm{class: "text-base-content/55"} Be the first to put something on this board.
+  - else
+    .grid.gap-6.sm:grid-cols-2.xl:grid-cols-3
+      = render partial: "posts/post", collection: @posts, locals: {board: @board}
 
-!= @pagy.series_nav
+  - if @pagy.pages > 1
+    != @pagy.series_nav
 
-.toggle-section{data: {controller: "toggle"}}
-  %button#new_post_button.secondary{type: "button", data: {action: "click->toggle#toggle", toggle_target: "button", toggle_hidden_text_value: "＋ Add Post", toggle_shown_text_value: "Cancel"}} ＋ Add Post
+.toggle-section.mt-12{data: {controller: "toggle", toggle_hidden_text_value: "Add drawing", toggle_shown_text_value: "Cancel"}}
+  %div{class: "card border border-base-300 bg-base-200/70 shadow-lg"}
+    .card-body.gap-6.p-5.sm:p-6
+      .flex.flex-col.gap-4.sm:flex-row.sm:items-center.sm:justify-between
+        .space-y-1
+          %h2.text-2xl.font-bold Add a drawing
+          %p.text-sm{class: "text-base-content/55"} Draw directly in your browser. Pick a pen or stamp — no uploads needed.
+        %button#new_post_button.btn.btn-primary.gap-2{type: "button", aria: {expanded: (@post.errors.any? ? "true" : "false"), controls: "new_post_form"}, data: {action: "click->toggle#toggle", toggle_target: "button"}}
+          %span.button-icon.button-icon--plus{aria: {hidden: "true"}}= icon(:plus, size: 18)
+          %span.button-icon.button-icon--close{aria: {hidden: "true"}}= icon(:close, size: 18)
+          %span{data: {toggle_target: "label"}} Add drawing
 
-  #new_post_form.hidden{data: {toggle_target: "content"}}
-    %h2 New Post
-    = render partial: "posts/form", locals: {post: @board.posts.build}
+      #new_post_form{hidden: !@post.errors.any?, data: {toggle_target: "content"}}
+        %div{class: "border-t border-base-300/70 pt-6"}
+          = render "posts/form", post: @post

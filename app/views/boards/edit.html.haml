@@ -1,5 +1,17 @@
-%h1= "Edit: " + @board.title
-.board-meta-bar
-  = link_to "‹ Back to Boards", boards_path, class: "back-link"
+- content_for(:title) { "Edit: #{@board.title}" }
 
-= render "form"
+%nav.breadcrumbs.mb-5.text-sm{class: "text-base-content/50", aria: {label: "Breadcrumb"}}
+  %ul
+    %li= link_to "Boards", boards_path, class: "link link-hover"
+    %li= link_to @board.title, board_path(@board), class: "link link-hover"
+    %li
+      %span{aria: {current: "page"}} Edit
+
+%section.mb-8.space-y-4
+  %span.eyebrow Board settings
+  %h1.page-title Edit board
+  %p{class: "text-base-content/55"}= @board.title
+
+.card.border.border-base-300.bg-base-200.shadow-lg
+  .card-body.p-5.sm:p-7
+    = render "form"

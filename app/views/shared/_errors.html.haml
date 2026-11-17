@@ -1,0 +1,9 @@
+- if object.errors.any?
+  .alert.alert-error.error-explanation.mb-5.items-start.shadow-sm{role: "alert", id: "#{dom_id(object)}_errors"}
+    .mt-0.5= icon(:alert, size: 20)
+    %div
+      %h2.text-sm.font-bold
+        = "#{pluralize(object.errors.count, "error")} stopped this #{object.model_name.human.downcase} from being saved"
+      %ul.mt-1.list-inside.list-disc.space-y-0.5.text-sm
+        - object.errors.full_messages.each do |message|
+          %li= message

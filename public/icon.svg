@@ -1,3 +1,10 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="ImageBoard">
+  <defs>
+    <linearGradient id="brand-gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6cb6ff"/>
+      <stop offset="1" stop-color="#a371f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#brand-gradient)"/>
+  <path d="M32 13.5l3.3 10.2a6 6 0 0 0 3.8 3.8L49.3 30.8l-10.2 3.3a6 6 0 0 0-3.8 3.8L32 48.1l-3.3-10.2a6 6 0 0 0-3.8-3.8L14.7 30.8l10.2-3.3a6 6 0 0 0 3.8-3.8L32 13.5Z" fill="#fff"/>
 </svg>

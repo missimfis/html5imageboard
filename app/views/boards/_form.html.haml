@@ -1,14 +1,14 @@
-= form_with(model: @board, class: "board-form") do |f|
-  - if @board.errors.any?
-    .error-explanation
-      %h3= "#{pluralize(@board.errors.count, "error")} prohibited this board from being saved:"
-      %ul
-        - @board.errors.full_messages.each do |msg|
-          %li= msg
+= form_with(model: @board, class: "space-y-5") do |f|
+  = render "shared/errors", object: @board
 
-  .form-group
-    = f.label :title, "Board Name"
-    = f.text_field :title, placeholder: "Enter board name"
+  %div
+    = f.label :title, "Board name", class: "mb-2 block text-sm font-semibold"
+    = f.text_field :title, placeholder: "e.g. Sketches, Pixel art, Doodles", maxlength: Board::TITLE_MAX_LENGTH, required: true, autocomplete: "off", class: "input input-bordered w-full"
+    %p.mt-2.text-xs{class: "text-base-content/50"} Give it a short, memorable name. You can rename it later.
 
-  .form-actions
-    = f.submit @board.persisted? ? "Update Board" : "Create Board"
+  .flex.flex-wrap.items-center.gap-3.pt-1
+    = f.submit @board.persisted? ? "Save board" : "Create board", class: "btn btn-primary"
+    - if @board.persisted?
+      = link_to "Cancel", board_path(@board), class: "btn btn-ghost"
+    - else
+      %button.btn.btn-ghost{type: "button", data: {action: "toggle#close"}} Cancel

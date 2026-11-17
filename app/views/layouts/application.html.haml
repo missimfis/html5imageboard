@@ -1,21 +1,60 @@
-%html
+!!! 5
+%html{lang: "en", data: {theme: "imageboard"}}
   %head
-    %title Html5imageboard
+    %meta{charset: "utf-8"}
+    %title= page_title
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}
-    = stylesheet_link_tag "application", "pagy", media: "all"
+    %meta{content: page_description, name: "description"}
+    %meta{content: "dark light", name: "color-scheme"}
+    %meta{content: "#0b0f14", name: "theme-color"}
+    %link{rel: "icon", href: "/icon.svg", type: "image/svg+xml"}
+    %link{rel: "canonical", href: canonical_url}
+    %meta{content: page_title, property: "og:title"}
+    %meta{content: page_description, property: "og:description"}
+    %meta{content: "website", property: "og:type"}
+    %meta{content: canonical_url, property: "og:url"}
+    %meta{content: "en_US", property: "og:locale"}
+    %meta{content: "ImageBoard", property: "og:site_name"}
+    - if og_image_url
+      %meta{content: og_image_url, property: "og:image"}
+      %meta{content: "summary_large_image", name: "twitter:card"}
+      %meta{content: og_image_url, name: "twitter:image"}
+    = yield :head
+    = csp_meta_tag
+    = javascript_tag '(() => { try { const legacy = { dark: "imageboard", light: "imageboard-light" }; const stored = localStorage.getItem("imageboard-theme"); const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches; const theme = legacy[stored] || stored; document.documentElement.dataset.theme = theme === "imageboard" || theme === "imageboard-light" ? theme : (prefersLight ? "imageboard-light" : "imageboard"); } catch (_) {} })();', nonce: true
+    = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
     = javascript_importmap_tags
-    = csrf_meta_tag
+    = csrf_meta_tags
 
-  %body
-    %header
-      = link_to root_path, class: "logo" do
-        %img{src: "/images/logo.png", alt: "Logo"}
-        %span ImageBoard
+  %body{data: {controller: "theme"}, class: "flex min-h-screen flex-col text-base-content"}
+    %a.skip-link{href: "#main"} Skip to content
 
-    #container
-      - if notice
-        .flash.flash-notice{data: {controller: "flash"}}= notice
-      - if alert
-        .flash.flash-alert{data: {controller: "flash"}}= alert
+    %header.site-header
+      .mx-auto.flex.h-16.w-full.max-w-6xl.items-center.justify-between.gap-4.px-4.sm:px-6.lg:px-8
+        = link_to root_path, class: "flex items-center gap-3 rounded-xl", aria: {label: "ImageBoard home"} do
+          %span.brand-mark{aria: {hidden: "true"}}= icon(:sparkles, size: 20)
+          %span.flex.flex-col.leading-tight
+            %span.brand-name ImageBoard
+            %span{class: "hidden text-[0.65rem] font-bold uppercase tracking-[0.18em] text-base-content/45 sm:block"} Draw. Share. Repeat.
 
-      = yield
+        %nav.flex.items-center.gap-1{aria: {label: "Primary"}}
+          = nav_link_to "Boards", boards_path, active_class: "bg-base-200 text-primary", class: "btn btn-ghost btn-sm rounded-xl px-3 sm:px-4"
+          %button.theme-toggle.btn.btn-ghost.btn-circle.btn-sm{type: "button", data: {action: "theme#toggle", theme_target: "button"}, aria: {label: "Switch to light theme"}}
+            %span.theme-icon.theme-icon--sun{aria: {hidden: "true"}}= icon(:sun, size: 18)
+            %span.theme-icon.theme-icon--moon{aria: {hidden: "true"}}= icon(:moon, size: 18)
+
+    %main#main.flex-1.outline-none.scroll-mt-20{tabindex: "-1"}
+      .mx-auto.w-full.max-w-6xl.px-4.py-8.sm:px-6.sm:py-10.lg:px-8
+        #flash-region.mb-6.space-y-3
+          = render "shared/flash", type: :notice, message: notice
+          = render "shared/flash", type: :alert, message: alert
+
+        = yield
+
+    %footer{class: "mt-12 border-t border-base-300/60"}
+      %div{class: "mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-base-content/45 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"}
+        %p Built with Rails #{Rails.version} and Ruby #{RUBY_VERSION}.
+        %p.flex.items-center.gap-2
+          = link_to "GPL-3.0", "https://www.gnu.org/licenses/gpl-3.0.html", target: "_blank", rel: "noopener", class: "link link-hover"
+          %span{aria: {hidden: "true"}} ·
+          = link_to "GitHub", "https://github.com/missimfis/html5imageboard", target: "_blank", rel: "noopener", class: "link link-hover"

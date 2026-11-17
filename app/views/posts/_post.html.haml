@@ -1,10 +1,16 @@
-.post-card
-  .post-header
-    .post-title= post.title
-    .post-actions
-      = link_to "✏️", edit_board_post_path(@board, post), class: "post-action-icon", title: "Edit"
-      = button_to "🗑️", board_post_path(@board, post), method: :delete, class: "post-action-icon", title: "Delete", data: {confirm: "Delete this post?"}
-  .post-meta= time_ago_in_words(post.created_at) + " ago"
-  .post-image= image_tag("/posts/image/#{post.id}?v=#{post.updated_at.to_i}")
-  - if post.description.present?
-    .post-description= post.description
+%article{class: "post-card card group border border-base-300/80 bg-base-200/80 shadow-sm", id: dom_id(post)}
+  = link_to board_post_path(board, post), class: "post-media block overflow-hidden border-b border-base-300/60", aria: {label: "View drawing: #{post.title}"} do
+    %div{class: "aspect-[3/2] overflow-hidden"}
+      = post_image_tag(post, alt: "", class: "h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]")
+  .card-body.gap-3.p-4
+    .flex.items-start.justify-between.gap-3
+      %h2.post-title.text-base.font-bold.leading-snug
+        = link_to post.title, board_post_path(board, post), class: "outline-none hover:text-primary focus-visible:underline"
+      .-mr-1.-mt-1.flex.shrink-0.gap-1
+        = link_to edit_board_post_path(board, post), class: "btn btn-ghost btn-square btn-xs text-base-content/40 hover:text-base-content", title: "Edit post", aria: {label: "Edit post #{post.title}"} do
+          = icon(:pencil, size: 14)
+        = button_to board_post_path(board, post), method: :delete, class: "btn btn-ghost btn-square btn-xs text-base-content/40 hover:bg-error/10 hover:text-error", title: "Delete post", aria: {label: "Delete post #{post.title}"}, data: {turbo_confirm: "Delete this post?"} do
+          = icon(:trash, size: 14)
+    %p.post-meta.text-xs{class: "text-base-content/45"}= relative_time(post.created_at, prefix: "Posted ")
+    - if post.description.present?
+      %p.prose-description.line-clamp-2= post.description

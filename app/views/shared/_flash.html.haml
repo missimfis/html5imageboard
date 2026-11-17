@@ -1,0 +1,6 @@
+- if message.present?
+  .flash.alert.shadow-lg{class: (type == :alert ? "alert-error" : "alert-success"), data: {controller: "flash", action: "mouseenter->flash#pause mouseleave->flash#resume focusin->flash#pause focusout->flash#resume"}, role: (type == :alert ? "alert" : "status"), aria: {live: (type == :alert ? "assertive" : "polite")}}
+    %span{aria: {hidden: "true"}}= icon(type == :alert ? :alert : :sparkles, size: 18)
+    %span.flash-message.flex-1.text-sm.font-medium= message
+    %button.btn.btn-ghost.btn-circle.btn-xs.flash-close{type: "button", data: {action: "flash#dismiss"}, aria: {label: "Dismiss notification"}}
+      = icon(:close, size: 16)

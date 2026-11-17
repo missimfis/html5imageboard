@@ -1,10 +1,58 @@
-%h1= @post.title
-.board-meta-bar
-  = link_to "‹ Back to Board", board_path(@board), class: "back-link"
-  = link_to "Edit", edit_board_post_path(@board, @post), class: "back-link"
+- content_for(:title) { @post.title }
+- content_for(:description) { @post.description.presence || "A drawing on #{@board.title} shared on ImageBoard." }
+- content_for(:og_image) { post_image_url(@post) }
 
-.post-card
-  .post-meta= "Posted #{time_ago_in_words(@post.created_at)} ago"
-  .post-image= image_tag("/posts/image/#{@post.id}")
-  - if @post.description.present?
-    .post-description= @post.description
+%nav.breadcrumbs.mb-5.text-sm{class: "text-base-content/50", aria: {label: "Breadcrumb"}}
+  %ul
+    %li= link_to "Boards", boards_path, class: "link link-hover"
+    %li= link_to @board.title, board_path(@board), class: "link link-hover"
+    %li
+      %span{aria: {current: "page"}}= @post.title
+
+%section.mb-8.flex.flex-col.gap-5.sm:flex-row.sm:items-start.sm:justify-between
+  .max-w-2xl.space-y-3
+    %span.eyebrow Drawing
+    %h1.page-title= @post.title
+    %p.flex.flex-wrap.items-center.gap-2.text-sm{class: "text-base-content/55"}
+      = relative_time(@post.created_at, prefix: "Posted ")
+      %span{aria: {hidden: "true"}} ·
+      = link_to @board.title, board_path(@board), class: "link link-hover font-semibold text-primary"
+  .flex.flex-wrap.items-center.gap-2
+    = link_to edit_board_post_path(@board, @post), class: "btn btn-outline btn-sm gap-2 sm:btn-md" do
+      = icon(:pencil, size: 16)
+      Edit drawing
+    = button_to board_post_path(@board, @post), method: :delete, class: "btn btn-ghost btn-sm gap-2 text-error hover:bg-error/10 sm:btn-md", data: {turbo_confirm: "Delete this drawing?"} do
+      = icon(:trash, size: 16)
+      Delete drawing
+
+%article{class: "card overflow-hidden border border-base-300 bg-base-200/80 shadow-2xl lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]"}
+  %div{class: "post-media border-b border-base-300/60 lg:border-b-0 lg:border-r"}
+    = post_image_tag(@post, loading: "eager", alt: "Drawing for #{@post.title}", class: "block h-full w-full object-contain")
+  .flex.flex-col.gap-6.p-6
+    .space-y-3
+      %h2{class: "text-sm font-bold uppercase tracking-[0.14em] text-base-content/40"} About this drawing
+      - if @post.description.present?
+        %p.whitespace-pre-line.text-base.leading-relaxed{class: "text-base-content/75"}= @post.description
+      - else
+        %p.text-sm.italic{class: "text-base-content/40"} No description provided.
+
+    .divider.my-0
+
+    %dl.space-y-2.text-sm
+      .flex.items-center.justify-between.gap-3
+        %dt{class: "text-base-content/45"} Board
+        %dd= link_to @board.title, board_path(@board), class: "link link-hover font-semibold"
+      .flex.items-center.justify-between.gap-3
+        %dt{class: "text-base-content/45"} Posted
+        %dd= relative_time(@post.created_at)
+      .flex.items-center.justify-between.gap-3
+        %dt{class: "text-base-content/45"} Updated
+        %dd= relative_time(@post.updated_at)
+
+    .mt-auto.flex.flex-wrap.items-center.gap-2
+      = link_to board_path(@board), class: "btn btn-ghost btn-sm gap-2" do
+        = icon(:arrow_left, size: 16)
+        = "Back to #{@board.title}"
+      = link_to edit_board_post_path(@board, @post), class: "btn btn-outline btn-sm gap-2" do
+        = icon(:pencil, size: 14)
+        Edit

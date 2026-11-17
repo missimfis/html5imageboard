@@ -1,16 +1,24 @@
-= form_with(model: [@board, post], class: "post-form") do |f|
-  .form-group
-    = f.label :title
-    = f.text_field :title, placeholder: "Enter post title"
+= form_with(model: [@board, post], class: "space-y-6") do |f|
+  = render "shared/errors", object: post
 
-  .form-group
-    = f.label :description
-    = f.text_area :description, placeholder: "Enter description", rows: 4
+  .space-y-5
+    %div
+      = f.label :title, "Title", class: "mb-2 block text-sm font-semibold"
+      = f.text_field :title, placeholder: "Give your drawing a name", maxlength: Post::TITLE_MAX_LENGTH, required: true, autocomplete: "off", autofocus: post.persisted?, class: "input input-bordered w-full"
 
-  .form-group
-    %label{for: "drawbox"} Draw your image
-    %canvas#drawbox{width: "600", height: "400"}
-    %input#drawbox-data{type: "hidden", name: "drawbox_data"}
+    %div
+      = f.label :description, "Description", class: "mb-2 block text-sm font-semibold"
+      = f.text_area :description, placeholder: "Optional: add some context for your drawing", rows: 3, maxlength: Post::DESCRIPTION_MAX_LENGTH, class: "textarea textarea-bordered w-full"
 
-  .form-actions
-    = f.submit "Create Post"
+  .space-y-3
+    .flex.flex-wrap.items-center.justify-between.gap-2
+      %span.text-sm.font-semibold Drawing
+      %span.badge.badge-ghost.badge-sm 600 × 400 · PNG
+    = render "posts/canvas", post: post
+
+  .flex.flex-wrap.items-center.gap-3
+    = f.submit post.persisted? ? "Save changes" : "Publish drawing", class: "btn btn-primary"
+    - if post.persisted?
+      = link_to "Cancel", board_path(@board), class: "btn btn-ghost"
+    - else
+      %button.btn.btn-ghost{type: "button", data: {action: "toggle#close"}} Cancel
