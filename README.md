@@ -8,6 +8,8 @@ A drawing-first image board built with Ruby on Rails 8.1, Tailwind CSS 4 and dai
 - **Drawing Canvas**: Pen, eraser, colors, brush sizes, undo, clear and eight ready-made stamps
 - **Theme Toggle**: Custom dark and light daisyUI themes with the choice saved in `localStorage`
 - **Full CRUD**: Create, read, update, and delete boards and posts
+- **Ownership Checks**: Edits and deletes are limited to the browser session that created the content
+- **Moderation**: Optional password-protected mode for editing or removing any content
 - **Pagination**: Pagy-powered navigation through boards and posts
 - **Accessible UI**: Skip link, labelled controls, keyboard undo (`Ctrl`/`⌘` + `Z`), arrow-key toolbar navigation and semantic Haml markup
 - **SEO**: Canonical URLs, Open Graph/Twitter metadata, sitemap and per-page descriptions
@@ -90,6 +92,17 @@ With the keyboard, use `Tab` to move through the form and toolbar, and the arrow
 ### Editing/Deleting
 - Click the pencil icon to edit a board or post
 - Click the trash icon to delete, then confirm the Turbo dialog
+- Edit and delete controls are only shown for content created by the current browser session
+
+### Moderation
+Set `MODERATOR_PASSWORD` (or the `moderator_password` credential) to enable the moderation link in the footer. A moderator can edit or delete any board or post; the session remains active until you choose **Exit moderation**.
+
+Boards and posts created before ownership tracking was added have no owner token. Only a moderator can edit or delete that older content.
+
+### Limits
+- Request bodies are capped at 16 MiB by `RequestBodyLimit` before Rails parses them.
+- Drawings are capped at 10 MiB decoded; oversized Base64 payloads are rejected before decoding.
+- For defense in depth, configure the reverse proxy to enforce a matching request-body limit.
 
 ## Project Structure
 

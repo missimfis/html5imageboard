@@ -58,3 +58,6 @@
           = link_to "GPL-3.0", "https://www.gnu.org/licenses/gpl-3.0.html", target: "_blank", rel: "noopener", class: "link link-hover"
           %span{aria: {hidden: "true"}} ·
           = link_to "GitHub", "https://github.com/missimfis/html5imageboard", target: "_blank", rel: "noopener", class: "link link-hover"
+          - if moderation_configured?
+            %span{aria: {hidden: "true"}} ·
+            = link_to "Moderation", new_moderation_path, class: "link link-hover"

@@ -1,4 +1,6 @@
 class Post < ApplicationRecord
+  include Ownable
+
   TITLE_MAX_LENGTH = 120
   DESCRIPTION_MAX_LENGTH = 5_000
 
@@ -12,6 +14,9 @@ class Post < ApplicationRecord
             length: { maximum: TITLE_MAX_LENGTH }
   validates :description, length: { maximum: DESCRIPTION_MAX_LENGTH }
   validates :image_data, presence: true
+  validates :image_data,
+            length: { maximum: PngImage::MAX_DATA_LENGTH },
+            if: :image_data_changed?
 
   scope :newest, -> { order(created_at: :desc, id: :desc) }
 end

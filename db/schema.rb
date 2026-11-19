@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_120200) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_120000) do
   create_table "boards", force: :cascade do |t|
     t.string "title", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "posts_count", default: 0, null: false
+    t.string "owner_token"
     t.index ["created_at"], name: "index_boards_on_created_at"
     t.index ["title"], name: "index_boards_on_title", unique: true
   end
@@ -27,6 +28,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_120200) do
     t.integer "board_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "owner_token"
     t.index ["board_id", "created_at"], name: "index_posts_on_board_id_and_created_at"
     t.index ["created_at"], name: "index_posts_on_created_at"
   end

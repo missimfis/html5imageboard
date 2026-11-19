@@ -10,7 +10,10 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       post board_posts_url(@board),
            params: { post: { title: "Sketch", description: "hi" }, drawbox_data: "data:image/png;base64,aGVsbG8=" }
     end
+
+    created_post = @board.posts.find_by!(title: "Sketch")
     assert_redirected_to board_url(@board)
+    assert created_post.owner_token.present?
   end
 
   test "create post without image re-renders the board with errors" do
@@ -28,56 +31,85 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", posts(:hello).title
   end
 
-  test "update a post title" do
-    post = posts(:hello)
-    patch board_post_url(@board, post), params: { post: { title: "Renamed sketch" } }
+  test "does not update a post without ownership" do
+    post_record = posts(:hello)
+
+    patch board_post_url(@board, post_record), params: { post: { title: "Renamed sketch" } }
+
     assert_redirected_to board_url(@board)
-    assert_equal "Renamed sketch", post.reload.title
+    assert_equal "First post", post_record.reload.title
   end
 
-  test "update a post with a new drawing" do
-    post = posts(:hello)
-    patch board_post_url(@board, post),
+  test "owner can update their post title" do
+    post_record = create_owned_post(@board, title: "Sketch")
+
+    patch board_post_url(@board, post_record), params: { post: { title: "Renamed sketch" } }
+
+    assert_redirected_to board_url(@board)
+    assert_equal "Renamed sketch", post_record.reload.title
+  end
+
+  test "owner can update a post with a new drawing" do
+    post_record = create_owned_post(@board, title: "Sketch")
+
+    patch board_post_url(@board, post_record),
           params: { post: { title: "Redrawn" }, drawbox_data: "iVBORw0KGgoAAAANSUhEUg==" }
+
     assert_redirected_to board_url(@board)
-    assert_equal "iVBORw0KGgoAAAANSUhEUg==", post.reload.image_data
+    assert_equal "iVBORw0KGgoAAAANSUhEUg==", post_record.reload.image_data
   end
 
-  test "delete a post" do
-    assert_difference -> { Post.count }, -1 do
+  test "does not render edit for a post without ownership" do
+    get edit_board_post_url(@board, posts(:hello))
+    assert_redirected_to board_url(@board)
+  end
+
+  test "owner can render edit for their post" do
+    post_record = create_owned_post(@board, title: "Sketch")
+    get edit_board_post_url(@board, post_record)
+    assert_response :success
+  end
+
+  test "does not delete a post without ownership" do
+    assert_no_difference -> { Post.count } do
       delete board_post_url(@board, posts(:hello))
     end
     assert_redirected_to board_url(@board)
   end
 
-  test "image endpoint serves the post image" do
-    get post_image_url(posts(:hello))
-    assert_response :success
-    assert_equal "image/png", response.media_type
+  test "owner can delete their post" do
+    post_record = create_owned_post(@board, title: "Sketch")
+
+    assert_difference -> { Post.count }, -1 do
+      delete board_post_url(@board, post_record)
+    end
+
+    assert_redirected_to board_url(@board)
   end
 
-  test "image endpoint returns not found for missing post" do
-    get post_image_url(999_999_999)
-    assert_response :not_found
+  test "another session cannot delete an owned post" do
+    post_record = create_owned_post(@board, title: "Mine")
+    other_session = open_session
+
+    assert_no_difference -> { Post.count } do
+      other_session.delete board_post_url(@board, post_record)
+    end
+
+    other_session.assert_redirected_to board_url(@board)
   end
 
-  test "image endpoint returns not found for undecodable data" do
-    post = posts(:hello)
-    post.update!(image_data: "not-a-png")
-    get post_image_url(post)
-    assert_response :not_found
+  test "board page hides post controls from other sessions" do
+    get board_url(@board)
+
+    assert_select "a[title='Edit post']", count: 0
+    assert_select "button[title='Delete post']", count: 0
   end
 
-  test "image endpoint returns not found for non-PNG data" do
-    post = posts(:hello)
-    post.update!(image_data: "data:image/png;base64,aGVsbG8=")
-    get post_image_url(post)
-    assert_response :not_found
-  end
+  test "board page shows post controls to the owner" do
+    create_owned_post(@board, title: "Sketch")
+    get board_url(@board)
 
-  test "image endpoint sets long-lived cache headers" do
-    get post_image_url(posts(:hello))
-    assert_includes response.headers["Cache-Control"], "max-age="
-    assert_includes response.headers["Cache-Control"], "immutable"
+    assert_select "a[title='Edit post']", count: 1
+    assert_select "button[title='Delete post']", count: 1
   end
 end

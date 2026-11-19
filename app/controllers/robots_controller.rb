@@ -7,6 +7,7 @@ class RobotsController < ApplicationController
       Allow: /
       Disallow: /boards/*/edit
       Disallow: /boards/*/posts/*/edit
+      Disallow: /moderation
 
       Sitemap: #{sitemap_url}
     TEXT
