@@ -1,4 +1,6 @@
 class Board < ApplicationRecord
+  include Ownable
+
   TITLE_MAX_LENGTH = 80
 
   has_many :posts, dependent: :destroy

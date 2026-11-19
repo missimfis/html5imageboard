@@ -20,7 +20,10 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { Board.count }, 1 do
       post boards_url, params: { board: { title: "Fresh board" } }
     end
-    assert_redirected_to board_url(Board.last)
+
+    board = Board.find_by!(title: "Fresh board")
+    assert_redirected_to board_url(board)
+    assert board.owner_token.present?
   end
 
   test "create board without title shows errors" do
@@ -31,18 +34,68 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".error-explanation"
   end
 
-  test "update board" do
+  test "does not update a board without ownership" do
     board = boards(:general)
+
     patch board_url(board), params: { board: { title: "Renamed" } }
+
+    assert_redirected_to board_url(board)
+    assert_equal "General Discussion", board.reload.title
+  end
+
+  test "owner can update their board" do
+    board = create_owned_board
+
+    patch board_url(board), params: { board: { title: "Renamed" } }
+
     assert_redirected_to board_url(board)
     assert_equal "Renamed", board.reload.title
   end
 
-  test "delete board" do
-    assert_difference -> { Board.count }, -1 do
-      delete board_url(boards(:general))
+  test "does not render edit for a board without ownership" do
+    get edit_board_url(boards(:general))
+    assert_redirected_to board_url(boards(:general))
+  end
+
+  test "owner can render edit for their board" do
+    board = create_owned_board
+    get edit_board_url(board)
+    assert_response :success
+  end
+
+  test "does not delete a board without ownership" do
+    board = boards(:general)
+
+    assert_no_difference -> { Board.count } do
+      delete board_url(board)
     end
+
+    assert_redirected_to board_url(board)
+  end
+
+  test "owner can delete their board" do
+    board = create_owned_board
+
+    assert_difference -> { Board.count }, -1 do
+      delete board_url(board)
+    end
+
     assert_redirected_to boards_url
+  end
+
+  test "index hides board controls from other sessions" do
+    get boards_url
+
+    assert_select "a[title='Edit board']", count: 0
+    assert_select "button[title='Delete board']", count: 0
+  end
+
+  test "index shows board controls to the owner" do
+    create_owned_board
+    get boards_url
+
+    assert_select "a[title='Edit board']", count: 1
+    assert_select "button[title='Delete board']", count: 1
   end
 
   test "index renders pagination" do

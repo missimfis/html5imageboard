@@ -6,6 +6,8 @@ en:
           attributes:
             image_data:
               blank: "is missing — draw something first"
+  authorization:
+    denied: "You can only edit or delete content you created."
   boards:
     created: "Board was successfully created. Start adding a post..."
     updated: "Image board was successfully updated."
@@ -15,3 +17,8 @@ en:
     updated: "Post updated!"
     destroyed: "Post deleted!"
     create_failed: "Can't add post!"
+  moderation:
+    signed_in: "Moderation mode enabled."
+    signed_out: "Moderation mode disabled."
+    invalid_password: "Incorrect moderation password."
+    disabled: "Moderation is not configured."

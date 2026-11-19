@@ -1,0 +1,39 @@
+- content_for(:title) { "Moderation" }
+
+%nav.breadcrumbs.mb-5.text-sm{class: "text-base-content/50", aria: {label: "Breadcrumb"}}
+  %ul
+    %li= link_to "Boards", boards_path, class: "link link-hover"
+    %li
+      %span{aria: {current: "page"}} Moderation
+
+%section.mb-8.space-y-4
+  %span.eyebrow Moderation
+  %h1.page-title Moderation
+  %p{class: "text-base-content/55"} Moderators can edit or delete any board or post.
+
+- if moderator?
+  .card.border.border-base-300.bg-base-200.shadow-lg
+    .card-body.gap-5.p-5.sm:p-7
+      %p You are signed in as a moderator.
+      .flex.flex-wrap.items-center.gap-3
+        = link_to "Browse boards", boards_path, class: "btn btn-primary"
+        = button_to "Exit moderation", moderation_path, method: :delete, class: "btn btn-outline", data: {turbo_confirm: "Exit moderation mode?"}
+- elsif moderation_configured?
+  .card.border.border-base-300.bg-base-200.shadow-lg
+    .card-body.p-5.sm:p-7
+      = form_with url: moderation_path, method: :post, class: "space-y-5" do |f|
+        %div
+          = f.label :password, "Moderation password", class: "mb-2 block text-sm font-semibold"
+          = f.password_field :password, required: true, autocomplete: "current-password", class: "input input-bordered w-full"
+        .flex.flex-wrap.items-center.gap-3
+          = f.submit "Sign in", class: "btn btn-primary"
+          = link_to "Cancel", boards_path, class: "btn btn-ghost"
+- else
+  .card.border.border-base-300.bg-base-200.shadow-lg
+    .card-body.p-5.sm:p-7
+      %p
+        Moderation is not configured. Set
+        %code MODERATOR_PASSWORD
+        or the
+        %code moderator_password
+        credential to enable it.

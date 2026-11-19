@@ -1,5 +1,6 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: %i[show edit update destroy]
+  before_action :authorize_board_owner!, only: %i[edit update destroy]
 
   rate_limit to: 10, within: 1.minute, only: %i[create update destroy]
 
@@ -16,7 +17,7 @@ class BoardsController < ApplicationController
   def edit; end
 
   def create
-    @board = Board.new(board_params)
+    @board = Board.new(board_params.merge(owner_token: current_owner_token))
 
     if @board.save
       redirect_to @board, notice: t("boards.created")
@@ -43,6 +44,10 @@ class BoardsController < ApplicationController
 
   def set_board
     @board = Board.find(params.expect(:id))
+  end
+
+  def authorize_board_owner!
+    authorize_owner!(@board, fallback_location: board_path(@board))
   end
 
   def board_params

@@ -7,6 +7,7 @@ class MetaControllerTest < ActionDispatch::IntegrationTest
     assert_match "User-agent: *", response.body
     assert_match "Allow: /", response.body
     assert_match "Disallow: /boards/*/edit", response.body
+    assert_match "Disallow: /moderation", response.body
     assert_match "Sitemap: #{sitemap_url}", response.body
   end
 

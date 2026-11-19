@@ -20,6 +20,15 @@ class PostTest < ActiveSupport::TestCase
     assert post.errors.added?(:title, :too_long, count: Post::TITLE_MAX_LENGTH)
   end
 
+  test "image data has a maximum length" do
+    post = Post.new(
+      title: "Too large",
+      image_data: "A" * (PngImage::MAX_DATA_LENGTH + 1)
+    )
+    assert_not post.valid?
+    assert post.errors.added?(:image_data, :too_long, count: PngImage::MAX_DATA_LENGTH)
+  end
+
   test "belongs to a board" do
     assert_equal boards(:general), posts(:hello).board
   end

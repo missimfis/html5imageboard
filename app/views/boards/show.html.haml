@@ -17,13 +17,14 @@
           = pluralize(@board.posts_count, "drawing")
         %span{aria: {hidden: "true"}} ·
         %span= relative_time(@board.updated_at, prefix: "active ")
-  .flex.flex-wrap.items-center.gap-2
-    = link_to edit_board_path(@board), class: "btn btn-outline btn-sm gap-2 sm:btn-md" do
-      = icon(:pencil, size: 16)
-      Edit board
-    = button_to board_path(@board), method: :delete, class: "btn btn-ghost btn-sm gap-2 text-error hover:bg-error/10 sm:btn-md", data: {turbo_confirm: "Delete this board and all of its posts?"} do
-      = icon(:trash, size: 16)
-      Delete board
+  - if moderator? || owned_by_current_session?(@board)
+    .flex.flex-wrap.items-center.gap-2
+      = link_to edit_board_path(@board), class: "btn btn-outline btn-sm gap-2 sm:btn-md" do
+        = icon(:pencil, size: 16)
+        Edit board
+      = button_to board_path(@board), method: :delete, class: "btn btn-ghost btn-sm gap-2 text-error hover:bg-error/10 sm:btn-md", data: {turbo_confirm: "Delete this board and all of its posts?"} do
+        = icon(:trash, size: 16)
+        Delete board
 
 #posts
   - if @posts.empty?

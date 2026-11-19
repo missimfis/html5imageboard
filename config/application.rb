@@ -6,6 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require_relative "../lib/request_body_limit"
+
 module Html5imageboard
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -19,6 +21,11 @@ module Html5imageboard
     # The app renders images client-side via the drawing canvas, so Active
     # Storage variants are not used.
     config.active_storage.variant_processor = :disabled
+
+    # Reject oversized request bodies before Rails parses form data or
+    # decodes any image payload.
+    config.middleware.insert_before 0, RequestBodyLimit,
+                                    max_bytes: RequestBodyLimit::DEFAULT_MAX_BYTES
 
     # Configuration for the application, engines, and railties goes here.
     #

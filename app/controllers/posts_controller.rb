@@ -1,10 +1,7 @@
 class PostsController < ApplicationController
-  PNG_DATA_URI_PREFIX = "data:image/png;base64,".freeze
-  PNG_SIGNATURE = "\x89PNG\r\n\x1A\n".b.freeze
-  MAX_DECODED_IMAGE_BYTES = 10.megabytes
-
   before_action :set_board, except: :image
   before_action :set_post, only: %i[show edit update destroy]
+  before_action :authorize_post_owner!, only: %i[edit update destroy]
 
   rate_limit to: 10, within: 1.minute, only: %i[create update destroy]
   rate_limit to: 60, within: 1.minute, only: :image
@@ -14,7 +11,7 @@ class PostsController < ApplicationController
   def edit; end
 
   def create
-    @post = @board.posts.new(post_params.merge(image_data: image_data_param))
+    @post = build_post
 
     if @post.save
       redirect_to board_path(@board), notice: t("posts.created")
@@ -69,6 +66,19 @@ class PostsController < ApplicationController
     @post = @board.posts.find(params.expect(:id))
   end
 
+  def authorize_post_owner!
+    authorize_owner!(@post, fallback_location: board_path(@board))
+  end
+
+  def build_post
+    @board.posts.new(
+      post_params.merge(
+        image_data: image_data_param,
+        owner_token: current_owner_token
+      )
+    )
+  end
+
   def post_params
     params.expect(post: %i[title description])
   end
@@ -82,17 +92,6 @@ class PostsController < ApplicationController
   end
 
   def decode_image(image_data)
-    return nil if image_data.blank?
-
-    encoded = image_data.delete_prefix(PNG_DATA_URI_PREFIX)
-    encoded += "=" * ((4 - (encoded.length % 4)) % 4)
-    png_data = Base64.strict_decode64(encoded)
-
-    return nil unless png_data.bytesize.between?(1, MAX_DECODED_IMAGE_BYTES)
-    return nil unless png_data.start_with?(PNG_SIGNATURE)
-
-    png_data
-  rescue ArgumentError
-    nil
+    PngImage.decode(image_data)
   end
 end
